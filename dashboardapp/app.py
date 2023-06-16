@@ -41,6 +41,8 @@ app = Dash(
     title=app_title,
 )
 
+server = app.server
+
 """
 ==========================================================================
 Data sets used in the dashboard
