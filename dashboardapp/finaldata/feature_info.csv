@@ -1,0 +1,274 @@
+Feature;description
+cntry;Country
+pspwght;Post-stratification weight including design weight
+anweight;Analysis weight
+nwspol;Time spent consuming news about politics and current affairs
+netusoft;Frequency of internet use
+netustm;Time spent using the internet on a typical day
+pplfair;Attitude towards “most people try to take advantage of you vs. try to be fair”
+psppsgva;Attitude towards “the political system allows people to have a say in what the government does”
+trstplc;Trust in the police
+contplt;Whether respondent has contacted a politician or government official in the last 12 months
+wrkprty;Whether respondent has worked in a political party or action group in the last 12 months
+stfeco;How satisfied with the present state of the economy in the country
+stfgov;How satisfied with the national government
+mnrgtjb;Attitude towards “men should have more right to a job than women when jobs are scarce”
+freehms;Attitude towards “gays and lesbians are free to live life as they wish”
+imsmetn;Attitude towards allowing many immigrants of the same race or ethnic group as majority
+imdfetn;Attitude towards allowing many immigrants of different races or ethnic groups from the majority
+inprdsc;With how many people can intimate and personal matters be discussed with
+aesfdrk;Feeling of safety of walking alone in the local area after dark
+health;Subjective general health
+hlthhmp;How often hampered in daily activities by illness, disability, infirmity, or mental problem
+rlgdnm;Current religion or denomination
+dscrrce;Whether or not respondent’s group is discriminated in terms of color or race
+dscrgnd;Whether or not respondent’s group is discriminated in terms of gender
+dscrref;Whether or not respondent refuses to answer the questions about discrimination
+dscrna;Whether or not respondent has not given an answer to the questions about discrimination
+ctzcntr;Country of which respondent is a citizen
+brncntr;Country of birth
+rfgfrpc;"Attitude towards ""most refugee applicants are not in real fear of persecution in their own countries”"
+elgcoal;Attitude towards how much electricity should be generated from coal in a particular country
+elgngas;Attitude towards how much electricity should be generated from natural gas in a particular country
+elgnuc;Attitude towards how much electricity should be generated from nuclear power in a particular country
+wrenexp;How worried about energy being too expensive for many people
+wrdpfos;How worried about the country being too dependent on fossil fuels
+clmthgt2;How much respondent has thought about climate change before the day of the interview
+sbsrnen;Whether or not respondent favors subsidizing renewable energy to reduce climate change
+gvslvue;"Attitude towards ""the standard of living for the unemployed is the responsibility of the government”"
+sbprvpv;Attitude towards “social benefits and services prevent widespread poverty”
+sbeqsoc;"Attitude towards ""social benefits and services lead to a more equal society”"
+sblwcoa;"Attitude towards ""social benefits and services make people less willing to care for one another”"
+eduunmp;Whether or not more money should be spent on education for the unemployed at the cost of unemployment benefit
+eudcnbf;Attitude towards “more decisions made by the EU will lead to a higher level of benefits of a particular country”
+lknemny;Likelihood of not having enough money for the household necessities in the next 12 months
+gndr;Gender of the respondent
+gndr3;Gender of third person in the household
+agea;Calculated age of the respondent
+dvrcdeva;Whether or not the respondent has ever been divorced or a civil union dissolved
+icpart2;Whether or not the respondent lives with husband, wife or partner (interviewer code)
+edulvlb;Highest level of education
+uempli;Whether or not one is unemployed and not actively looking for a job in the 7 days before the interview
+dsbld;Whether or not one is permanently sick or disabled in the 7 days before the interview
+hswrk;Whether or not is doing housework, looking after children or other in the 7 days before the interview
+dngoth;Whether or not is doing something other in the 7 days before the interview
+dngref;Whether or not respondent refuses to answer what done in the 7 days before the interview
+dngdk;Whether or not respondent does not know what done in the 7 days before the interview
+dngna;Whether or not no answer given for question what done in the 7 days before the interview
+wrkctra;Type of contract (duration)
+wkdcorga;How much influence respondent has on organizing their own daily work
+edctnp;Whether or not partner of respondent has followed an education in the 7 days before the interview
+edulvlfb;Highest level of education of father of respondent
+occf14b;Occupation of father of respondent when respondent was 14
+occm14b;Occupation of mother of respondent when respondent was 14
+imprich;Attitude towards “it is important to be rich, and to have money and expensive things”
+ipeqopt;Attitude towards “it is important that people are treated equally and have equal opportunities”
+impsafe;"Attitude towards ""it is important to live in secure and safe surroundings”"
+ipudrst;"Attitude towards ""it is important to understand different people”"
+inwmms;Month of the start of the interview
+inwyys;Year of the start of the interview
+trstun;Trust in the United Nations
+prtdgcl;How close is respondent to a political party
+stfdem;How satisfied with the way democracy works in the country
+imueclt;Attitude towards “the cultural life of the country is enriched by immigrants”
+rlgatnd;Frequency of attending religious services apart from special occasions
+rdcenr;How often doing something to reduce energy use
+wrinspw;How worried that energy supply is interrupted by insufficient power generated
+uemplwk;How many are unemployed and looking for work, of every 100 working age
+gndr2;Gender of second person in the household
+rshipa2;Relationship to respondent of second person in household
+rshipa3;Relationship to respondent of third person in household
+eisced;Highest level of education in ES-ISCED scale
+ipgdtim;"Attitude towards ""it is important to have a good time”"
+stflife;How satisfied with life as a whole
+elgwind;How much electricity in a particular country should be generated from wind power
+smdfslv;Attitude towards “for a fair society, differences in standard of living should be small”
+bennent;Attitude towards “many manage to obtain benefits or services they are not entitled to”
+yrbrn;Birth year of respondent
+edctn;Whether or not is following education in the 7 days before the interview
+uemplap;Whether or not partner of respondent is unemployed and not actively looking for a job in the 7 days before the interview
+dsbldp;Whether or not partner of respondent is permanently sick or disabled in the 7 days before the interview
+ipshabt;"Attitude towards ""it is important to show abilities and be admired”"
+lklmten;"Attitude towards ""it is likely that large numbers of people limit their energy use”"
+slvpens;"Attitude towards ""the standard of living of pensioners is good”"
+lbenent;"Attitude towards ""many with very low incomes get less benefit than legally entitled to”"
+maritalb;Legal marital status, post coded
+estsz;Establishment size
+impdiff;"Attitude towards ""it is important to try new and different things in life”"
+inwdde;Day of the month of the end of the interview
+slvuemp;"Attitude towards ""the standard of living of unemployed is good”"
+polintr;How interested in politics
+actrolga;Whether or not respondent is able to take an active role in a political group
+psppipla;"Attitude towards ""the political system allows people to have an influence on politics”"
+cptppola;Whether or not respondent is confident in their own ability to participate in politics
+trstplt;Trust in politicians
+sclact;Relative frequency of taking part in social activities compared to others of the same age
+elghydr;How much electricity in a particular country should be generated from hydroelectric power
+wrntdis;How worried about energy supply being interrupted by natural disasters or extreme weather
+ccnthum;Attitude towards “climate change is caused by natural processes, human activity or both”
+lkredcc;Attitude towards “when large numbers of people limit their energy use, it is likely that climate change will reduce”
+gvcldcr;Attitude towards “child care services for working parents are the responsibility of the government”
+wrkprbf;Attitude towards “there should be benefits for parents to combine work and family, even if this means higher taxes”
+rshpsts;Relationship with husband, wife or partner currently living with
+ipadvnt;Attitude towards “it is important to seek adventures and have an exciting life”
+trstep;Trust in the European Parliament
+stfhlth;"Attitude towards ""the current state of the health services in the country is good”"
+gvsrdcc;"Attitude towards ""it is likely that governments in enough countries take action to reduce climate change”"
+gvslvol;"Attitude towards ""the standard of living for the old is the responsibility of the government”"
+imsclbn;When should immigrants obtain rights to social benefits or services
+ipfrule;"Attitude towards ""it is important to do what is told and follow the rules”"
+ppltrst;"Attitude towards ""most people can be trusted”"
+euftf;Attitude towards “European unification can go further”
+impcntr;Attitude towards allowing immigrants from poorer countries outside Europe
+atcherp;How emotionally attached to Europe
+ipmodst;"Attitude towards ""it is important to be humble and modest and to not draw attention”"
+wrclmch;How worried about climate change
+uempla;Whether or not respondent is unemployed and actively looking for a job in the 7 days before the interview
+emprf14;Employment status of father of respondent when respondent was 14
+edulvlmb;Highest level of education of mother of respondent
+rlgblg;Whether respondent belongs to a particular religion or denomination
+wrdpimp;How worried about the country being too dependent on energy imports
+ipsuces;"Attitude towards ""it is important to be successful and that people recognize achievements”"
+rfgbfml;Attitude towards “granted refugees should be entitled to bring close family members”
+ccrdprs;To what extent does respondent feel personal responsibility to reduce climate change
+elgsun;How much electricity in a particular country should be generated from solar power
+stfedu;Attitude towards “the current state of education in the country is good”
+crmvct;Whether the respondent or a household member was a victim of burglary or assault in the last 5 years
+dscroth;Whether or not respondent’s group is discriminated in terms of other grounds
+gincdif;"Attitude towards ""the government should reduce differences in income levels”"
+eusclbf;Against or in favor of an EU-wide social benefit scheme
+lkuemp;How likely is it for the respondent to be unemployed and looking for work in the next 12 months
+trstprt;Trust in political parties
+atchctr;How emotionally attached to the country
+jbspv;Whether respondent is responsible for supervising other employees
+hmsfmlsh;Attitude towards “ashamed if close family member is gay or lesbian”
+rlgblge;Ever belonging to a particular religion or denomination
+yrbrn3;Birth year of third person in household
+cmsrv;Whether or not partner of respondent is doing community or military service in 7 days before interview
+tporgwk;Type of organization working or worked for
+emprelp;Employment relation of partner
+icwhct;Whether respondent has a set basic or contracted number of hours
+cflsenr;How confident respondent can use less energy than currently
+sblazy;"Attitude towards ""social benefits or services make people lazy”"
+iorgact;How much influence respondent has on policy decisions about activities of an organization
+banhhap;Attitude towards “sale of the least energy efficient household appliances should be banned to reduce climate change
+uentrjb;"Attitude towards ""most unemployed people do not really try to find a job”"
+trstlgl;Trust in the legal system
+vteurmmb;Whether respondent would vote for the country to remain a member of the EU or leave
+impfree;Attitude towards “it is important to make your own decisions and be free”
+ccgdbd;Attitude towards “climate change has a good impact across the world”
+vote;Whether or not respondent has voted in the last election
+sgnptit;Whether or not respondent has signed a petition in the last 12 months
+lvgptnea;Whether respondent has ever lived with a partner, without being married
+edulvlpb;Highest level of education partner
+dngdkp;Whether or not respondent does not know what partner has done in the 7 days before the interview
+pplhlp;"Attitude towards ""most of the time people are helpful”"
+pray;How often praying apart from at religious services
+eneffap;How likely is it for the respondent to buy the most energy efficient home appliance
+iphlppl;"Attitude towards ""it is important to help people and care for others well-being”"
+bnlwinc;"Attitude towards ""social benefits should only be for people with the lowest incomes”"
+domicil;Domicile of respondent
+wrpwrct;How worried about power cuts
+hincfel;Feeling about income of household nowadays
+elgbio;How much electricity in a particular country should be generated from biomass energy
+icpart1;Whether or not the respondent lives with husband, wife or partner (interviewer code)
+dweight;Design weight
+pweight;Population size weight
+ipcrtiv;"Attitude towards ""it is important to think of new ideas and be creative”"
+rtrdp;Whether or not partner of respondent is retired in the 7 days before the interview
+blgetmg;Whether or not respondent belongs to a minority ethnic group in the country
+region;Region of the respondent
+regunit;Regional unit of the respondent
+hincsrca;Main source of household income
+anctry1;First ancestry in European Standard Classification of Cultural and Ethnic Groups
+trstprl;Trust in the parliament of the country
+lrscale;Placement on left and right scale (political orientation)
+wrkorg;Whether or not respondent has worked in another (not a political party or action group) organization or association in the last 12 months
+badge;Whether respondent has worn or displayed a campaign badge or sticker in the last 12 months
+pbldmn;Whether or not respondent has taken part in a lawful public demonstration in the last 12 months
+bctprd;Whether or not respondent has boycotted certain products in the last 12 months
+pstplonl;Whether or not respondent has posted or shared anything about politics online in the last 12 months
+clsprty;Whether or not respondent feels closer to a particular party than all other parties (politics)
+sclmeet;How often socially meeting with friends, relatives or colleagues
+icpart3;Whether or not the respondent lives with husband, wife or partner (interviewer code)
+hmsacld;"Attitude towards ""gay and lesbian couples have a right to adopt children”"
+imbgeco;Attitude towards “immigration is good for the economy of the country”
+imwbcnt;Attitude towards “immigrants make the country a better place to live”
+happy;How happy is respondent
+dscrdk;Whether or not respondent does not know if group of respondent is discriminated
+rtrd;Whether or not respondent is retired in the 7 days before the interview
+rlgdgr;How religious is respondent
+dscrgrp;Whether or not respondent is a member of a group discriminated against in the country
+dscrntn;Whether or not respondent is discriminated in terms of nationality
+dscrrlg;Whether or not respondent is discriminated in terms of religion
+dscrlng;Whether or not respondent is discriminated in terms of language
+dscretn;Whether or not respondent is discriminated in terms of ethnic group
+dscrage;Whether or not respondent is discriminated in terms of age
+facntr;Whether or not the father of the respondent is born in the country
+dscrsex;Whether or not respondent is discriminated in terms of sexuality
+dscrdsb;Whether or not respondent is discriminated in terms of disability
+icomdng;How many activities doing by partner coded (interview code)
+lnghom1;First most spoken language at home
+mocntr;Whether mother is born in the country
+gvrfgap;"Attitude towards ""the government should be generous in judging applications for refugee status”"
+ownrdcc;How likely is it for the respondent to limit own energy use to reduce climate change
+inctxff;Attitude towards “taxes on fossil fuels should be increased to reduce climate change”
+wrtcfl;How worried about energy supply being interrupted by technical failures
+wrtratc;How worried about energy supply being interrupted by terrorist attacks
+clmchng;"Attitude towards ""the climate of the world is changing”"
+dfincac;Attitude towards “large differences in income are acceptable to reward talents and efforts”
+sbstrec;"Attitude towards ""social benefits and services place a too great strain on the economy”"
+admub;Administration of unemployment benefits questions
+sbbsntx;"Attitude towards ""social benefits and services cost businesses too much in taxes and charges"
+hhmmb;Number of people living regularly as a member of the household
+crpdwk;Whether or not respondent had control paid work in the 7 days before the interview
+pdjobev;Whether or not respondent ever had a paid job
+pdjobyr;The last year of the paid job
+chldhhe;Whether or not respondent ever had children living in the household
+iccohbt;Whether or not respondent is cohabiting (interviewer code)
+marsts;Legal marital status
+eiscedp;highest level of education of partner in ES-ISCED scale
+pdwrkp;Whether or not partner of respondent did paid work in the 7 days before the interview
+dngrefp;Whether or not respondent refuses to answer what partner has done in the 7 days before the interview
+icppdwk;Whether or not partner of respondent is in paid work (interviewer code)
+isco08p;Occupation of partner of respondent in ISCO08 code
+yrbrn2;Year of birth of second person in household
+icpdwrk;Whether or not respondent is in paid work (interviewer code)
+emplrel;Employment relation
+hinctnta;Total net income of all sources of household
+cmsrvp;Whether or not respondent is in community or military service in 7 days before the interview
+uemplip;Whether or not partner is unemployed and not actively looking for a job in the 7 days before interview
+chldhm;Whether or not children are living at home or not
+eduyrs;Years of fulltime education completed
+pdwrk;Whether or not respondent is doing paid work in 7 days before the interview
+mbtru;Whether or not respondent is or was a member of a trade union or similar organization
+hswrkp;Whether or not partner of respondent is doing housework, looking after children or other in the 7 days before the interview
+mnactic;Main activity in the last 7 days of all respondents, post coded
+dngothp;Whether or not partner of respondent is doing something other in the 7 days before the interview
+dngnapp;Whether or not question about what partner of respondent is doing in the 7 days before the interview is not applicable
+icomdnp;Whether or not partner of respondent is doing more than one activity in 7 days before interview (interviewer code)
+dngnap;Whether or not question about what respondent is doing in the 7 days before the interview is not applicable
+wkhtot;Total hours normally worked per week in main job with overtime
+nacer2;Industry type in NACE rev.2
+isco08;Occupation of respondent in ISCO08 code
+wkhct;Total contracted hours per week in main job excluding overtime
+wrkac6m;Whether or not respondent has paid work in another country of at least 6 months in the past 10 years
+uemp3m;Whether or not respondent was ever unemployed and seeking work for a period of more than 3 months
+wkhtotp;Hours normally worked in a week in main job with overtime, of partner
+eiscedf;Highest level of education of father in ES-ISCED
+emprm14;Employment status of mother of respondent when respondent was 14
+eiscedm;Highest level of education of mother in ES-ISCED
+atncrse;Whether or not respondent has improved knowledge or skills by a course, lecture or conference in the last 12 months
+impenv;"Attitude towards ""it is important to care for nature and the environment”"
+imptrad;"Attitude towards ""it is important to follow traditions and customs”"
+iplylfr;"Attitude towards ""it is important to be loyal to friends and devote to people that are close”"
+impfun;"Attitude towards ""it is important to seek fun and things that give pleasure”"
+ipstrgv;"Attitude towards ""it is important that the government is strong and ensures safety”"
+ipbhprp;"Attitude towards ""it is important to behave properly”"
+inwdds;Day of the month of the start of the interview
+iprspot;"Attitude towards ""it is important to get respect from others”"
+inwmme;Month of the end of the interview
+inwyye;Year of the end of the interview
+inwtm;Interview length in minutes of main questionnaire
+basinc;"Attitude towards ""there should be a basic income scheme”"
+dscrnap;Answered ‘not applicable’ to question discrimination to group of respondent
