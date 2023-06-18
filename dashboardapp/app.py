@@ -228,7 +228,7 @@ Tables
 
 # feature importance tables
 importance_table1 = dash_table.DataTable(
-    id="importance",
+    id="importance1",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
         {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
@@ -241,7 +241,7 @@ importance_table1 = dash_table.DataTable(
 )
 
 importance_table2 = dash_table.DataTable(
-    id="importance",
+    id="importance2",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
         {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
@@ -254,7 +254,7 @@ importance_table2 = dash_table.DataTable(
 )
 
 importance_table3 = dash_table.DataTable(
-    id="importance",
+    id="importance2",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
         {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
