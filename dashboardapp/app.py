@@ -295,7 +295,7 @@ performance_table2 = dash_table.DataTable(
 )
 
 performance_table3 = dash_table.DataTable(
-    id="performance2",
+    id="performance3",
     columns=[{"id": "Metric", "name": "Metric", "type": "text"}]
     + [
         {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
