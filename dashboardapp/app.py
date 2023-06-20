@@ -111,7 +111,7 @@ interact_info_text = dcc.Markdown(
 the average over all targets. This changes the view of all four graphs. 
 Next, you can also choose **by which model to sort** the graph visualizing the feature importance
 and whether to **show all features** (in case a specific target is chosen in the first interaction button). 
-For the performance bar graph, you can *(un)select particular metrics* to customize your view. 
+For the performance bar graph, you can **(un)select particular metrics** to customize your view. 
 Lastly, when a specific target is selected, you can choose to either view the feature descriptions (default)
 or the **cluster information**.
 """, style={'color':'#5c5c5c'}
@@ -171,7 +171,7 @@ footer = html.Div(
         dcc.Markdown(
             """
             This dashboard is made by Lieve Göbbels as a part of her Master's thesis "Using Multiverse Analysis for Estimating Response Models: Towards an 
-            Archive of Informative Features," supervised by Kyle M. Lang at Utrecht University, The Netherlands
+            Archive of Informative Features," supervised by Kyle M. Lang at Utrecht University, The Netherlands.
             """,
         style={
                         "color": "#333333",
@@ -254,7 +254,7 @@ importance_table2 = dash_table.DataTable(
 )
 
 importance_table3 = dash_table.DataTable(
-    id="importance2",
+    id="importance3",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
         {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
