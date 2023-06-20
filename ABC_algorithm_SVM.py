@@ -1,11 +1,10 @@
 import random
 import sys
 import copy
-import pipeline_SVM
 import numpy as np
 import time
 
-# ---- Important information ----
+# ---- Important information ---- #
 
 __doc__ = """
 
