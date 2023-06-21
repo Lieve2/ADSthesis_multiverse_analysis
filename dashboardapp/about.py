@@ -10,7 +10,7 @@ linkedin = "fa-brands fa-linkedin"
 dash_url = "https://dash.plotly.com/"
 git_lieve = "https://github.com/Lieve2"
 git_project = "https://github.com/Lieve2/ADSthesis_multiverse_analysis.git"
-lkdin_lieve = "www.linkedin.com/in/lievegobbels"
+lkdin_lieve = "https://www.linkedin.com/in/lievegobbels"
 
 
 
@@ -35,45 +35,47 @@ text = dcc.Markdown(
     className="ps-2",
 )
 
-# see_github = html.Span(
-#     [
-#         "  See code in ",
-#         html.A([html.I(className=github + " pe-1"), "GitHub"], href=git_project), # change to own github once done
-#     ],
-#     className="lh-lg align-bottom",
-# )
-
 authors = html.P(
     [
         "By ",
-        make_link("",linkedin, lkdin_lieve),
-        make_link("Lieve Göbbels", github, git_lieve),
+        make_link("", linkedin, lkdin_lieve),
+        make_link(" Lieve Göbbels", github, git_lieve),
     ],
     className="card-text p-2",
 )
 
 card = dbc.Card(
     [
-        dbc.Row(
+        dbc.Stack(
             [
-                dbc.Col(cover_img,
-                        width=3,
-                        align="center"),
                 dbc.Col(
-                    [text, button],
-                    width=7,
+                    cover_img,
+                    width=2
+                ),
+                dbc.Col(
+                    text,
+                    width=10,
                     align="center"
                 ),
-                # dbc.Col(see_github, width=4,
-                #         align="center")
+                dbc.Col(
+                    button,
+                    width=4,
+                    align="center"
+                ),
             ],
-            className="g-0 d-flex align-items-center",
+            className="g-0 d-flex align-items-center text-center",
+            gap=2.5,
         ),
         dbc.Row(dbc.Col(authors),
-                justify="center"),
+        justify="center"),
     ],
     className="my-5 small",
-    style={"maxWidth": "26em"},
+    style={
+        "maxWidth": "36em",
+    "maxHeight": "18em",
+    "padding-top": "0.5em",
+    "padding-bottom": "0.5em"
+    },
 )
 
 app.layout = dbc.Container(card, fluid=True)
