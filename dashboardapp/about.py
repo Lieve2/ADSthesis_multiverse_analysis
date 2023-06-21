@@ -7,6 +7,7 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.YETI, dbc.icons.FONT_AWESO
 uu_img = Image.open("/Users/lievegobbels/PycharmProjects/ADSthesis/figures/uulogo.png") #"https://user-images.githubusercontent.com/72614349/185497519-733bdfc3-5731-4419-9a68-44c1cad04a78.png"
 github = "fa-brands fa-github"
 linkedin = "fa-brands fa-linkedin"
+dash_url = "https://dash.plotly.com/"
 git_lieve = "https://github.com/Lieve2"
 git_project = "https://github.com/Lieve2/ADSthesis_multiverse_analysis.git"
 lkdin_lieve = "www.linkedin.com/in/lievegobbels"
