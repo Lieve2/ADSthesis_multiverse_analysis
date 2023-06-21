@@ -21,7 +21,6 @@ warnings.filterwarnings("ignore")
 #         :return:      a single data frame of the aggregated csv files
 #         """
 
-
 def random_imputation(df):
 
     df_imp = df.copy()
@@ -36,8 +35,6 @@ def random_imputation(df):
 def permutate_features(X, threshold):
 
     corr = spearmanr(X).correlation
-    # corr = X.corr()
-    #print(corr)
 
     # ensure symmetry
     corr = (corr + corr.T) / 2
@@ -47,8 +44,6 @@ def permutate_features(X, threshold):
     # distance matrix and linkage with Ward's
     dist_matrix = 1 - np.abs(corr)
     dist_link = hierarchy.ward(squareform(dist_matrix))
-    # dist_matrix = 1 - corr.abs().values
-    # dist_link = hierarchy.linkage(dist_matrix, method="ward")
 
     # group features in clusters and keep one feature per cluster
     cluster_ids =hierarchy.fcluster(dist_link, threshold, criterion='distance')
@@ -57,18 +52,16 @@ def permutate_features(X, threshold):
         cluster_id_to_feat_id[cluster_id].append(idx)
     selected_features = [v[0] for v in cluster_id_to_feat_id.values()]
 
-    # print(cluster_id_to_feat_id)
-
     X_new = X.iloc[:, selected_features]
-
-    # print(X_new)
 
     return X_new, cluster_id_to_feat_id
 
 def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
+
     # encode objects in data
     enc = OrdinalEncoder()
-    data_obj = data.select_dtypes(include=object)
+    #data_obj = data.select_dtypes(include=object)
+    data_obj = data[data.columns.intersection(num_feat)]
     enc.fit(data_obj)
     encoding = enc.fit_transform(data[data_obj.columns])
 
@@ -78,30 +71,20 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
         data[i] = encoding[:, c]
         c += 1
 
-    y = data[tuning_target].notnull().astype('int')  # change to df.notnull().astype('int')
-
-    # X = data.drop(tuning_target, axis=1)
+    y = data[tuning_target].notnull().astype('int')
     X = data
 
-    # cat_feat = X.drop(['dweight', 'pspwght',
-    #                        'pweight', 'anweight'], axis=1).columns
-
-    # num_feat = ['dweight', 'pspwght','pweight', 'anweight']
+    if tuning_target in num_feat:
+        num_feat = [i for i in num_feat if i != tuning_target]
 
     cat_feat = X.drop(num_feat, axis=1).columns
 
-
-    # scaler = StandardScaler()
-
     for c in cat_feat:
-        X[c] = X[c].fillna(-1).astype('category', copy=False) # missing values as new category in the categorical data
-    # for n in num_feat:
-    #     X[n] = scaler.fit_transform(X[n].to_frame())
-    #print(features)
+        X[c] = X[c].fillna(-1).astype('category', copy=False)
+    for n in num_feat:
+        X[n] = random_imputation(X[n].to_frame())
 
-    #encoder = TargetEncoder()
-    #X_scaled = encoder.fit_transform(X, y)
-
+    # scaling-encoding pipeline
     numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
     categorical_transformer = Pipeline(steps=[("encoder", TargetEncoder())])
     preprocessor = ColumnTransformer(transformers=[("num", numeric_transformer, num_feat),
@@ -115,20 +98,7 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
     X_new, clusters = permutate_features(X_scaled, threshold)  # X_scaled
     features = X_new.columns
 
-
-    # scale/target encode the data
-    # scaler = StandardScaler()
-    # scaler.fit(X_new)
-    # X_scaled = scaler.transform(X_new)
-    # for n in num_feat:
-    #     X[n] = scaler.fit_transform(X[n].to_frame())
-    # encoder = TargetEncoder()
-    # X_scaled = encoder.fit_transform(X_new, y)
-    #print(X_scaled)
-
-    #print(X_new, y)
-
-    return X_new, y, features, clusters #X_scaled
+    return X_new, y, features, clusters
 
 def encode_scale_data(data, num_feat, tuning_target):
 
@@ -149,7 +119,6 @@ def encode_scale_data(data, num_feat, tuning_target):
 
     # label missing values
     X = data.fillna('missing')
-
 
     cat_feat = X.drop(num_feat, axis=1).columns
 
@@ -175,22 +144,25 @@ def encode_scale_data(data, num_feat, tuning_target):
         # add missingness back into df
         X_scaled.loc[X[f] == 'missing', f] = np.nan
 
-        # X_scaled[f] = X_scaled[f].loc[X[f] == 'missing']
-    # print(X_scaled['netustm'].loc[X['netustm'] == 'missing'].index)
-    # X_scaled = pd.DataFrame(list(X_scaled)) #, columns=features_compl
-
-    # print(X_scaled[X_scaled[['netustm', 'yrbrn3']].isnull().any(axis=1)])
-
     return X_scaled
 
+def rosenbrock(vector, a=1, b=100):
+    """f(x, y) = (a-x)^2 + b(y-x^2)^2"""
 
-# # load data
-# data = pd.read_csv('ESS8 data/ESS8_subset_cleaned_timeadj_wmissingvals.csv', low_memory=False)
-#
-# #define numerical features
-# num_feat = ['dweight', 'pspwght','pweight', 'anweight', 'inwtm']
-#
-# print(encode_scale_data(data, num_feat, 'netustm'))
+    vector = np.array(vector)
 
-# impute 'missing' with np.nan
+    return (a - vector[0])**2 + b * (vector[1] - vector[0]**2)**2
+
+
+def rastrigin(vector):
+    """                     n
+            f(x) = 10*n + Sigma { x_i^2 - 10*cos(2*PI*x_i) }
+                           i=1
+                           with xi within [-5.12:5.12]
+
+    """
+
+    vector = np.array(vector)
+
+    return 10 * vector.size + sum(vector * vector - 10 * np.cos(2 * np.pi * vector))
 
