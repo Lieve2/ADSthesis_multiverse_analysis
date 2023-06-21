@@ -122,57 +122,6 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
 
     return X_new, y, features, clusters
 
-# def encode_scale_data(data, num_feat, tuning_target):
-#     """
-#             :param data:            a data frame with missing values
-#             :param num_feat:        a list of numeric features in the data
-#             :param tuning_target    the target feature
-#             :return:
-#     """
-#
-#     # encode objects in data
-#     enc = OrdinalEncoder()
-#     data_obj = data.select_dtypes(include=object)
-#     enc.fit(data_obj)
-#     encoding = enc.fit_transform(data[data_obj.columns])
-#
-#     c = 0
-#
-#     for i in data_obj.columns:
-#         data[i] = encoding[:, c]
-#         c += 1
-#
-#     # set target for scaling
-#     y = data[tuning_target].notnull().astype('int')
-#
-#     # label missing values
-#     X = data.fillna('missing')
-#
-#     cat_feat = X.drop(num_feat, axis=1).columns
-#
-#     # set categorical data to corresponding type
-#     for c in cat_feat:
-#         X[c] = X[c].astype('category', copy=False)
-#
-#     # define scaling-encoding pipeline
-#     numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
-#     categorical_transformer = Pipeline(steps=[("encoder", TargetEncoder())])
-#     preprocessor = ColumnTransformer(transformers=[("num", numeric_transformer, num_feat),
-#                                                    ("cat", categorical_transformer, cat_feat)])
-#
-#     # extract features
-#     features_compl = X.columns
-#
-#     # perform scale-encode pipeline and put transformed data into df
-#     X_scaled = pd.DataFrame(preprocessor.fit_transform(X, y), columns=features_compl)
-#
-#     # impute missing values back into data
-#     for f in features_compl:
-#         # add missingness back into df
-#         X_scaled.loc[X[f] == 'missing', f] = np.nan
-#
-#     return X_scaled
-
 def rosenbrock(vector, a=1, b=100):
     """
     :param vector:  a vector to calculate the rosenbrock function on
