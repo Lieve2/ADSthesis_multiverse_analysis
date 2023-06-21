@@ -13,6 +13,7 @@ import joblib
 import shap
 shap.initjs()
 
+
 def Trainer(X_train, y_train, pars):
     """
             :param X_train:     observed training data (df)
@@ -29,12 +30,11 @@ def Trainer(X_train, y_train, pars):
                                         min_samples_split=round(pars[3]),
                                         min_samples_leaf=round(pars[4]),
                                         n_jobs=-1,                   # run in parallel on 3 cores
-                                        warm_start=True)  #reuse solution of previous call (speeds up about 2x)
-
+                                        warm_start=True)  # reuse solution of previous call (speeds up about 2x)
 
     X_train = np.array(X_train)
     y_train = np.array(y_train)
-    if X_train.ndim > 5: #adjust max dim size
+    if X_train.ndim > 5:  # adjust max dim size
         size = len(X_train)
         X_train = X_train.reshape(size, -1)
 
@@ -57,7 +57,7 @@ def Tester(clf, X_test, y_test):
 
     X_test = np.array(X_test)
 
-    if X_test.ndim > 5: # adjust max dim size
+    if X_test.ndim > 5:  # adjust max dim size
         size = len(X_test)
         X_test = X_test.reshape(size, -1)
 
@@ -68,6 +68,7 @@ def Tester(clf, X_test, y_test):
     miscalc = 1 - matthew
 
     return miscalc, true, predicted
+
 
 def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False):
     """
@@ -82,7 +83,7 @@ def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False)
 
     classification = Trainer(X_train, y_train, pars)
 
-    if (feat_importance == True):
+    if feat_importance is True:
         with parallel_backend('threading', n_jobs=-1):
             explainer = shap.Explainer(classification)
             shap_test = explainer(X_test)
@@ -95,6 +96,7 @@ def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False)
         classmap = None
 
     return Tester(classification, X_test, y_test), importances, classification, classmap
+
 
 def BestParMeasures(true, predicted):
     """
@@ -133,7 +135,6 @@ class OptRFParameters(AbstractWrapper):
 
         self.REPORT = ""
 
-
     def objective_function_value(self, decision_variable_values):
         """
                 :param decision_variable_values:     hyperparameter values (list)
@@ -154,20 +155,17 @@ def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test):
             :return:                optimal parameters and corresponding matthews coefficient
     """
 
-
     # adjust objective function
     func = OptRFParameters(sub_X_train, sub_y_train, sub_X_test, sub_y_test)
-
-
 
     # order: n_estimators, max_features, max_depth, min_samples_split, min_samples_leaf
     min_hyperpars = [1, 2, 2, 2, 1]
     max_hyperpars = [500,np.array(sub_X_train).shape[1]-1, 50, 10, 10]
     list_pars = [min_hyperpars, max_hyperpars]
 
-
     # scale the hyperparameters
     global scaling_factor
+
     scaling_factor = np.linalg.norm(list_pars)
     list_par_norm = (list_pars / scaling_factor)
 
@@ -189,6 +187,7 @@ def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test):
     print(message.format(list(pars.round().tolist()), float(fitness)))
 
     return pars, fitness
+
 
 def KfoldCV(k, X, y, filename, features):
     """
@@ -264,7 +263,7 @@ def KfoldCV(k, X, y, filename, features):
         averages['model {}'.format(m)] = df_measures.mean().tolist()
 
     df_averages = pd.DataFrame.from_dict(averages, orient='index')
-    df_averages.columns = ['accuracy', 'balanced accuracy', 'ROC', 'F1','Matthews']
+    df_averages.columns = ['accuracy', 'balanced accuracy', 'ROC', 'F1', 'Matthews']
     best = df_averages['Matthews'].idxmax()
 
     df_pars = pd.DataFrame.from_dict(pars, orient='index').round()
@@ -277,7 +276,7 @@ def KfoldCV(k, X, y, filename, features):
     best_pars_scaled = best_pars / scaling_factor
 
     ## test phase
-    res2 = SearchingPars(X_train, y_train, X_test, y_test, best_pars_scaled, feat_importance=True) #adjust pars
+    res2 = SearchingPars(X_train, y_train, X_test, y_test, best_pars_scaled, feat_importance=True)
 
     res2_measures = BestParMeasures(res2[0][1], res2[0][2])
     res2_feat_importance = res2[1]
@@ -304,4 +303,3 @@ def KfoldCV(k, X, y, filename, features):
 
     elapsed_t = time.process_time() - t
     print(f"Elapsed time test phase: {elapsed_t} sec")
-

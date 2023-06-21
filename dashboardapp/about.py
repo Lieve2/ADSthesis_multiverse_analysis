@@ -4,7 +4,7 @@ from PIL import Image
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.YETI, dbc.icons.FONT_AWESOME])
 
-uu_img = Image.open("/Users/lievegobbels/PycharmProjects/ADSthesis/figures/uulogo.png") #"https://user-images.githubusercontent.com/72614349/185497519-733bdfc3-5731-4419-9a68-44c1cad04a78.png"
+uu_img = Image.open("/Users/lievegobbels/PycharmProjects/ADSthesis/figures/uulogo.png")
 github = "fa-brands fa-github"
 linkedin = "fa-brands fa-linkedin"
 dash_url = "https://dash.plotly.com/"
@@ -13,9 +13,9 @@ git_project = "https://github.com/Lieve2/ADSthesis_multiverse_analysis.git"
 lkdin_lieve = "https://www.linkedin.com/in/lievegobbels"
 
 
-
 def make_link(text, icon, link):
     return html.Span(html.A([html.I(className=icon + " ps-2"), text], href=link))
+
 
 button = dbc.Button(
     "Go to project code", color="secondary", href=git_project, size="sm", className="mt-2 ms-1"
@@ -67,14 +67,14 @@ card = dbc.Card(
             gap=2.5,
         ),
         dbc.Row(dbc.Col(authors),
-        justify="center"),
+                justify="center"),
     ],
     className="my-5 small",
     style={
         "maxWidth": "36em",
-    "maxHeight": "18em",
-    "padding-top": "0.5em",
-    "padding-bottom": "0.5em"
+        "maxHeight": "18em",
+        "padding-top": "0.5em",
+        "padding-bottom": "0.5em"
     },
 )
 

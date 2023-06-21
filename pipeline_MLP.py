@@ -1,3 +1,4 @@
+import warnings
 import joblib
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
@@ -12,9 +13,8 @@ import time
 from joblib import parallel_backend
 import shap
 shap.initjs()
-
-import warnings
 warnings.filterwarnings("ignore")
+
 
 def Trainer(X_train, y_train, pars):
     """
@@ -27,7 +27,7 @@ def Trainer(X_train, y_train, pars):
     # nr_units int, dropout_rate 0-1float, learning_rate 0-01float,
     # beta_1 0-1float, beta_2 0-1float
     nr_units = pars[0] * scaling_factor
-    hidden_layers = (round(nr_units), round(nr_units/2), round(nr_units/4), round(nr_units/8)) # 4 hidden layers
+    hidden_layers = (round(nr_units), round(nr_units/2), round(nr_units/4), round(nr_units/8))  # 4 hidden layers
 
     X_train = np.array(X_train)
     y_train = np.array(y_train)
@@ -35,21 +35,21 @@ def Trainer(X_train, y_train, pars):
         size = len(X_train)
         X_train = X_train.reshape(size, -1)
 
-    classifier = MLPClassifier(hidden_layer_sizes=hidden_layers, #hidden_layers
-                               activation='logistic', #sigmoid
+    classifier = MLPClassifier(hidden_layer_sizes=hidden_layers,  # hidden_layers
+                               activation='logistic',  # sigmoid
                                solver='adam',
-                               alpha=pars[1], #regularization
+                               alpha=pars[1],  # regularization
                                batch_size=2048,
                                learning_rate_init=pars[2],
-                               max_iter=150, #nr epochs
+                               max_iter=150,  # nr epochs
                                shuffle=True,
                                random_state=144,
-                               tol = 0.0001, #optim tolerance (default used)
+                               tol=0.0001,  # optim tolerance (default used)
                                warm_start=True,
-                               early_stopping=True, #set to true if want to validate (10%) within
+                               early_stopping=True,  # set to true if want to validate (10%) within
                                beta_1=pars[3],
                                beta_2=pars[4],
-                               n_iter_no_change=20 # default nr epochs for tol
+                               n_iter_no_change=20  # default nr epochs for tol
                                )
 
     with parallel_backend('threading', n_jobs=-1):
@@ -71,7 +71,7 @@ def Tester(clf, X_test, y_test):
 
     X_test = np.array(X_test)
 
-    if X_test.ndim > 5: # adjust max dim size
+    if X_test.ndim > 5:  # adjust max dim size
         size = len(X_test)
         X_test = X_test.reshape(size, -1)
 
@@ -97,7 +97,7 @@ def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False)
 
     classification = Trainer(X_train, y_train, pars)
 
-    if (feat_importance == True):
+    if feat_importance is True:
         with parallel_backend('threading', n_jobs=-1):
             X_train_sum = shap.sample(X_train, 300, random_state=144)
             X_test_sum = shap.sample(X_test, 500, random_state=144)
@@ -177,7 +177,6 @@ def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test):
     # adjust objective function
     func = OptRFParameters(sub_X_train, sub_y_train, sub_X_test, sub_y_test)
 
-
     # order: nr_units, L2 regu term (alpha), learning_rate, beta_1, beta_2
     min_hyperpars = [20, 0.00001, 0.0001, 0.6, 0.6]
     max_hyperpars = [200, 0.01, 0.01, 0.999, 0.999]
@@ -185,15 +184,16 @@ def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test):
 
     # scale the hyperparameters
     global scaling_factor
+
     to_be_scaled = [list_pars[0][0], list_pars[1][0]]
     scaling_factor = np.linalg.norm(to_be_scaled)
-    list_par_norm = ([list_pars[0][0], list_pars[1][0]] / scaling_factor) #.tolist()
+    list_par_norm = ([list_pars[0][0], list_pars[1][0]] / scaling_factor)  # .tolist()
 
     final_list_pars = [[list_par_norm[0], *list_pars[0][1:]], [list_par_norm[1], *list_pars[1][1:]]]
 
     abc = ArtificialBeeColony(function=func,
-                              l_bound=final_list_pars[0] ,
-                              u_bound=final_list_pars[1] ,
+                              l_bound=final_list_pars[0],
+                              u_bound=final_list_pars[1],
                               hive_size=50,
                               max_iterations=50,
                               seed=144,
@@ -263,7 +263,7 @@ def KfoldCV(k, X, y, filename, features):
 
     # 3x3 (3 folds, 3 models)
     for m in range(0, k):
-        par_sc = pars['model {}'.format(m)][0] /scaling_factor
+        par_sc = pars['model {}'.format(m)][0] / scaling_factor
         par_scaled = [par_sc, *pars['model {}'.format(m)][1:]]
 
         for f in range(0, k):

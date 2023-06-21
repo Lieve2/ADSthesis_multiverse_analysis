@@ -93,7 +93,8 @@ Markdown Text
 
 datasource_text = dcc.Markdown(
     """
-    The data set used in this study is the ESS08 data (2016) and can be retrieved [here](https://ess-search.nsd.no/en/study/f8e11f55-0c14-4ab3-abde-96d3f14d3c76)
+    The data set used in this study is the ESS08 data (2016) and can be 
+    retrieved [here](https://ess-search.nsd.no/en/study/f8e11f55-0c14-4ab3-abde-96d3f14d3c76)
     """
 )
 
@@ -108,12 +109,12 @@ and whether to **show all features** (in case a specific target is chosen in the
 For the performance bar graph, you can **(un)select particular metrics** to customize your view. 
 Lastly, when a specific target is selected, you can choose to either view the feature descriptions (default)
 or the **cluster information**.
-""", style={'color':'#5c5c5c'}
+""", style={'color': '#5c5c5c'}
 )
 
 cluster_info_text = dcc.Markdown(
-    id = 'clusterinfotext',
-    style={"maxHeight":"900px", "maxWidth":"800px", "overflow":"scroll"}
+    id='clusterinfotext',
+    style={"maxHeight": "900px", "maxWidth": "800px", "overflow": "scroll"}
 
 )
 
@@ -134,28 +135,37 @@ but three different types of models, namely Support Vector Machine Classifiers (
 either strengthening or nuancing the importance of the respective features. As such, the central research question
  of this study is defined as follows:
  
-_To create an archive of essential predictors, how can multiverse analysis direct the process of identifying predictors of non-response?_
+_To create an archive of essential predictors, how can multiverse analysis direct the process of identifying predictors 
+of non-response?_
 
-The aim of this dashboard is to provide clear and interactive visualizations to explore and analyze the results of this multivariate analysis.
-This dashboard consists of different graphs and plots suitable for the results at hand, following the principles described by Munzner (2014) and others. 
+The aim of this dashboard is to provide clear and interactive visualizations to explore and analyze the results of this 
+multivariate analysis.
+This dashboard consists of different graphs and plots suitable for the results at hand, following the principles 
+described by Munzner (2014) and others. 
     """
 )
 
 learn_text2 = dcc.Markdown(
     """
-The first two plots shown are variations of each other: a horizontal bar plot and the standard (vertical) bar plot. This type of plots is ideal for the tasks of looking up 
+The first two plots shown are variations of each other: a horizontal bar plot and the standard (vertical) bar plot. This 
+type of plots is ideal for the tasks of looking up 
 and comparing values of one quantitative value attribute, 
 like feature importance and model performance. Immediately below the bar plots 
 visualizing feature importance and model performance a visualization of the six 
 different class maps is presented. These are scatter plots that show the 
 uncertainty of the model for each observation in relation to the difficulty of the observation.
 There is one scatter plot for each prediction class, so two class maps per model as the task is binary 
-classification. To allow for easier comprehension, in each plot two helper lines are added to indicate the 99% quantile distance from the class (i.e. extremely difficult observations) and the midpoint 
+classification. To allow for easier comprehension, in each plot two helper lines are added to indicate the 99% 
+quantile distance from the class (i.e. extremely difficult observations) and the midpoint 
 of class uncertainty (i.e. the area where the model is most uncertain).
-For the class 0 maps (left), blue is wrongly assigned to class 1 with a certainty defined by the value on the y-axis. The closer to the 0.5 line, the higher the uncertainty. The difficulty of an observation is indicated by the location on the x-axis, where further to the right indicates higher difficulty. Similarly, for the class 1 maps, orange-colored plots are wrongly assigned to class 0, a y-value of 0.5 indicates high
+For the class 0 maps (left), blue is wrongly assigned to class 1 with a certainty defined by the value on the y-axis. 
+The closer to the 0.5 line, the higher the uncertainty. The difficulty of an observation is indicated by the location on 
+the x-axis, where further to the right indicates higher difficulty. Similarly, for the class 1 maps, orange-colored 
+plots are wrongly assigned to class 0, a y-value of 0.5 indicates high
 uncertainty and a large value on the x-axis indicates high difficulty
 The last graph present in the dashboard is a correlation heat map, to allow assessing the
-existence of multicollinearity for the different data sets used during the processing and of the original (cleaned) data.
+existence of multicollinearity for the different data sets used during the processing and of the original (cleaned) 
+data.
     """
 )
 
@@ -164,10 +174,11 @@ footer = html.Div(
     [
         dcc.Markdown(
             """
-            This dashboard is made by Lieve Göbbels as a part of her Master's thesis "Using Multiverse Analysis for Estimating Response Models: Towards an 
+            This dashboard is made by Lieve Göbbels as a part of her Master's thesis "Using Multiverse Analysis for 
+            Estimating Response Models: Towards an 
             Archive of Informative Features," supervised by Kyle M. Lang at Utrecht University, The Netherlands.
             """,
-        style={
+            style={
                         "color": "#333333",
                         "backgroundColor": "#c6d1cc",
                         "marginTop": "5px",
@@ -175,7 +186,7 @@ footer = html.Div(
                         "paddingTop": "45px",
                         "paddingBottom": "45px",
                         "marginLeft": "0px",
-                        "marginRight":"0px",
+                        "marginRight": "0px",
                         "textAlign": "center",
                         # "font-family": 'Droid Sans Mono',
                     },
@@ -185,9 +196,12 @@ footer = html.Div(
     className="p-2 mt-5 bg-secondary text-white small",
 )
 
+
 def clusterinfotext(target, datadescript):
-    if (datadescript == 'show cluster info' and target != 'average'):
+
+    if datadescript == 'show cluster info' and target != 'average':
         df_cluster_info = pd.read_csv('~/PycharmProjects/ADSthesis/clusters info/RF/RF_{}.csv'.format(target))
+
         df_cluster_info.rename(columns={'Unnamed: 0': 'cluster number'}, inplace=True)
         df_cluster_info.set_index(df_cluster_info.columns[0], inplace=True)
 
@@ -201,17 +215,16 @@ def clusterinfotext(target, datadescript):
         text = df_cluster_info.to_markdown(index=False, headers=['selected target', '1st other feature',
                                                                  '2nd', '3rd',
                                                                  '4th', '5th',
-                                                                 '6th','7th',
-                                                                 '8th','9th',
-                                                                 '10th','11th',
-                                                                 '12th','13th',
-                                                                 '14th','15th'])
+                                                                 '6th', '7th',
+                                                                 '8th', '9th',
+                                                                 '10th', '11th',
+                                                                 '12th', '13th',
+                                                                 '14th', '15th'])
     else:
         df_cluster_info = df_featureinfotext.reset_index(drop=True).sort_values('Feature')
         text = df_cluster_info.to_markdown(index=False)
 
     return text
-
 
 
 """
@@ -225,7 +238,7 @@ importance_table1 = dash_table.DataTable(
     id="importance1",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
-        {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
+        {"id": col, "name": col, "type": "numeric", "format": Format(precision=4)}
         for col in df_imp_c_RF.columns[1:]
     ],
     data=df_imp_c_RF.to_dict("records"),
@@ -238,7 +251,7 @@ importance_table2 = dash_table.DataTable(
     id="importance2",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
-        {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
+        {"id": col, "name": col, "type": "numeric", "format": Format(precision=4)}
         for col in df_imp_c_SVM.columns
     ],
     data=df_imp_c_SVM.to_dict("records"),
@@ -251,7 +264,7 @@ importance_table3 = dash_table.DataTable(
     id="importance3",
     columns=[{"id": "Feature", "name": "Feature", "type": "text"}]
     + [
-        {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
+        {"id": col, "name": col, "type": "numeric", "format": Format(precision=4)}
         for col in df_imp_c_MLP.columns[1:]
     ],
     data=df_imp_c_MLP.to_dict("records"),
@@ -266,7 +279,7 @@ performance_table1 = dash_table.DataTable(
     id="performance1",
     columns=[{"id": "Metric", "name": "Metric", "type": "text"}]
     + [
-        {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
+        {"id": col, "name": col, "type": "numeric", "format": Format(precision=4)}
         for col in df_perf_RF.columns[1:]
     ],
     data=df_perf_RF.to_dict("records"),
@@ -279,7 +292,7 @@ performance_table2 = dash_table.DataTable(
     id="performance2",
     columns=[{"id": "Metric", "name": "Metric", "type": "text"}]
     + [
-        {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
+        {"id": col, "name": col, "type": "numeric", "format": Format(precision=4)}
         for col in df_perf_SVM.columns[1:]
     ],
     data=df_perf_SVM.to_dict("records"),
@@ -292,7 +305,7 @@ performance_table3 = dash_table.DataTable(
     id="performance3",
     columns=[{"id": "Metric", "name": "Metric", "type": "text"}]
     + [
-        {"id": col, "name": col, "type": "numeric", "format":Format(precision=4)}
+        {"id": col, "name": col, "type": "numeric", "format": Format(precision=4)}
         for col in df_perf_MLP.columns[1:]
     ],
     data=df_perf_MLP.to_dict("records"),
@@ -302,11 +315,11 @@ performance_table3 = dash_table.DataTable(
 )
 
 
-
 """
 ==========================================================================
 Figures
 """
+
 
 def make_horbarplot(target, subset, sortby, title):
     """
@@ -318,12 +331,12 @@ def make_horbarplot(target, subset, sortby, title):
     """
 
     # filter data based on interaction input
-    if (subset == 'subset' and target != 'average'):
-        data_RF = df_imp_RF.loc[:, ['Feature',target]]
+    if subset == 'subset' and target != 'average':
+        data_RF = df_imp_RF.loc[:, ['Feature', target]]
         data_RF = data_RF.dropna()
-        data_SVM = df_imp_SVM.loc[:, ['Feature',target]]
+        data_SVM = df_imp_SVM.loc[:, ['Feature', target]]
         data_SVM = data_SVM.dropna()
-        data_MLP = df_imp_MLP.loc[:, ['Feature',target]]
+        data_MLP = df_imp_MLP.loc[:, ['Feature', target]]
         data_MLP = data_MLP.dropna()
         height = 3000
 
@@ -344,12 +357,12 @@ def make_horbarplot(target, subset, sortby, title):
         data_MLP = data_MLP.sort_values(target)
         sorting = data_MLP['Feature']
 
-    fig=make_subplots(
+    fig = make_subplots(
         specs=[[{}]]
     )
 
     # adjust layout to place x-axis labels on top and bottom
-    fig.update_layout(xaxis2={'anchor':'y', 'overlaying':'x', 'side':'top'})
+    fig.update_layout(xaxis2={'anchor': 'y', 'overlaying': 'x', 'side': 'top'})
 
     # make horizontal bar plots
     fig.add_trace(
@@ -388,10 +401,10 @@ def make_horbarplot(target, subset, sortby, title):
     # make ghost plot for x-axis adjustment (i.e. ticks & labels on top and bottom)
     fig.add_trace(
         go.Bar(
-        x=None,
-        y=None,
-        name='ghost',
-        showlegend=False
+            x=None,
+            y=None,
+            name='ghost',
+            showlegend=False
         )
     )
 
@@ -414,18 +427,19 @@ def make_horbarplot(target, subset, sortby, title):
         margin=dict(b=40, t=75, l=35, r=30, pad=50),
         height=height,
         paper_bgcolor=COLORS["background"],
-        xaxis1={'anchor':'free', 'position':1, 'side':'top', 'ticks':'outside'},
-        xaxis2={'anchor':'free', 'overlaying':'x1', 'side':'bottom'},
+        xaxis1={'anchor': 'free', 'position': 1, 'side': 'top', 'ticks': 'outside'},
+        xaxis2={'anchor': 'free', 'overlaying': 'x1', 'side': 'bottom'},
         plot_bgcolor=COLORS["background"],
         hovermode='closest',
         margin_pad=50,
         barmode='group',
-        yaxis={'categoryorder':'array', 'categoryarray':sorting},
+        yaxis={'categoryorder': 'array', 'categoryarray': sorting},
     )
 
     fig.update_xaxes(showgrid=True, gridwidth=1.3, gridcolor='darkgrey')
 
     return fig
+
 
 def make_vertbarplot(target, metrics, title):
     """
@@ -440,7 +454,7 @@ def make_vertbarplot(target, metrics, title):
     # make bar plots
     fig.add_trace(
             go.Bar(
-                y= df_perf_RF[target],
+                y=df_perf_RF[target],
                 x=df_perf_RF['Metric'][df_perf_RF['Metric'].isin(metrics)],
                 marker={"color": COLORS["model1"]},
                 # hoverinfo="none",
@@ -475,7 +489,6 @@ def make_vertbarplot(target, metrics, title):
                   line_color='slategrey',
                   annotation_position='bottom right')
 
-
     # adjust layout
     fig.update_layout(
         title_text=title,
@@ -485,13 +498,14 @@ def make_vertbarplot(target, metrics, title):
         legend=dict(x=0.95, y=1.15),
         margin=dict(b=40, t=90, l=40, r=15),
         height=400,
-        xaxis1={'anchor':'free', 'position':0, 'side':'bottom'},
+        xaxis1={'anchor': 'free', 'position': 0, 'side': 'bottom'},
         hovermode='closest',
     )
 
     fig.update_xaxes(showgrid=True, gridwidth=1.3)
 
     return fig
+
 
 def make_heatmap(target, title):
     """
@@ -501,12 +515,12 @@ def make_heatmap(target, title):
     """
 
     # determine data based on interaction input
-    if target=='average':
+    if target == 'average':
         data = df_original
         features = df_original.columns
 
     else:
-        features = df_imp_RF.loc[:, ['Feature',target]].dropna()['Feature']
+        features = df_imp_RF.loc[:, ['Feature', target]].dropna()['Feature']
         data = df_original[df_original.columns.intersection(features)]
 
     # calculate correlation
@@ -517,7 +531,7 @@ def make_heatmap(target, title):
     # make heat map
     fig.add_trace(
         go.Heatmap(
-            z = corr,
+            z=corr,
             x=features,
             y=features,
             # manual color scale to highlight high correlation values
@@ -541,7 +555,7 @@ def make_heatmap(target, title):
         height=1100,
         width=1100,
         xaxis=dict(scaleanchor='x', constrain='domain',
-                    showticklabels=True, tickangle=45,
+                   showticklabels=True, tickangle=45,
                    tickfont=dict(size=10)),
         yaxis=dict(showticklabels=True, tickangle=45,
                    tickfont=dict(size=10)),
@@ -549,6 +563,7 @@ def make_heatmap(target, title):
     )
 
     return fig
+
 
 def make_classmaps(target, title):
     """
@@ -562,10 +577,11 @@ def make_classmaps(target, title):
                         x_title='Localized Farness',
                         y_title='Probability of alternative class',
                         column_widths=[300, 300],
-                        row_heights=[300,300, 300],
+                        row_heights=[300, 300, 300],
+                        # 3 models, 2 classes
                         subplot_titles=['Class map of RF, class 0', 'Class map of RF, class 1',
                                         'Class map of SVM, class 0', 'Class map of SVM, class 1',
-                                        'Class map of MLP, class 0', 'Class map of MLP, class 1']) # 3 models, 2 classes
+                                        'Class map of MLP, class 0', 'Class map of MLP, class 1'])
 
     fig.update_annotations(font_size=14)
 
@@ -589,8 +605,8 @@ def make_classmaps(target, title):
         # scatterplot 1 for first model
         fig.add_trace(
             go.Scatter(
-                x = classmap_0_RF['farness'],
-                y = classmap_0_RF['prob alternative'],
+                x=classmap_0_RF['farness'],
+                y=classmap_0_RF['prob alternative'],
                 mode='markers',
                 marker=dict(color=classmap_0_RF['colors']),
                 name='class 0',
@@ -598,7 +614,7 @@ def make_classmaps(target, title):
                 legendgrouptitle_text="Predicted class",
                 showlegend=False,
             ),
-        row=1, col=1)
+            row=1, col=1)
 
         # scatterplot 2 for first model
         fig.add_trace(
@@ -612,7 +628,7 @@ def make_classmaps(target, title):
                 showlegend=False
 
             ),
-        row=1, col=2)
+            row=1, col=2)
 
         # scatterplot 1 for second model
         fig.add_trace(
@@ -699,8 +715,8 @@ def make_classmaps(target, title):
 
         fig.update_yaxes(range=[-0.01, 1.05],
                          tickmode='array',
-                         tickvals=[0,0.25,0.5,0.75,1.0],
-                         ticktext=[0,0.25,0.5,0.75,1.0])
+                         tickvals=[0, 0.25, 0.5, 0.75, 1.0],
+                         ticktext=[0, 0.25, 0.5, 0.75, 1.0])
 
         fig.add_vline(x=qfunc(0.99), line_dash=None, row='all', col='all',
                       annotation_text='99% quantile distance from class',
@@ -727,16 +743,16 @@ def make_classmaps(target, title):
     else:
         fig = go.Figure()
         fig.update_layout(
-            title_x = 0.47,
-            xaxis = {'visible': False},
-            yaxis = {'visible': False},
-            annotations = [
+            title_x=0.47,
+            xaxis={'visible': False},
+            yaxis={'visible': False},
+            annotations=[
                 {
                     'text': "Here, the class maps will be shown<br>Please select an appropriate target",
                     'xref': "paper",
                     'yref': "paper",
                     'showarrow': False,
-                    'font':{'size':28}
+                    'font': {'size': 28}
                 }
             ],
             paper_bgcolor=COLORS["background"],
@@ -745,7 +761,6 @@ def make_classmaps(target, title):
         )
 
     return fig
-
 
 
 """
@@ -761,7 +776,7 @@ interact_info_card = dbc.Card(interact_info_text, className="mt-2")
 interact_card = dbc.Card(
     [
 
-        html.H4("Choose target", className="card-title", style={"color":"#5a5a5a", "textAlign":"center"}),
+        html.H4("Choose target", className="card-title", style={"color": "#5a5a5a", "textAlign": "center"}),
         dcc.Dropdown(
             id="target",
             options=df_imp_c_RF.columns,
@@ -770,13 +785,13 @@ interact_card = dbc.Card(
         ),
         html.Br(),
         html.H4("By which model should the horizontal bar plot be sorted?",
-                className="card-title", style={"color":"#5a5a5a", "textAlign":"center"}),
+                className="card-title", style={"color": "#5a5a5a", "textAlign": "center"}),
         dbc.RadioItems(
             id="sortby",
             options=['Random Forest', 'Support Vector Machine', 'Multi-layer Perceptron'],
             value='Random Forest',
             inputStyle={"margin-right": "20px", "textAlign": "center"},
-            label_checked_style={"color": "#5c5c5c", "font-weight":"bold"},
+            label_checked_style={"color": "#5c5c5c", "font-weight": "bold"},
             input_checked_style={
                 "backgroundColor": "#8da99c",
                 "borderColor": "#5c5c5c",
@@ -784,15 +799,15 @@ interact_card = dbc.Card(
         ),
         html.Hr(),
         html.H4("Show selected subset or all features?",
-                className="card-title", style={"color":"#5a5a5a", "textAlign":"center"}),
+                className="card-title", style={"color": "#5a5a5a", "textAlign": "center"}),
         html.H6("If average is selected, the feature importances of all features will be shown",
-                style={"color":"#5a5a5a", "textAlign":"center"}),
+                style={"color": "#5a5a5a", "textAlign": "center"}),
         dbc.RadioItems(
             id="subset",
             options=['all', 'subset'],
             value='subset',
             inputStyle={"margin-right": "20px", "textAlign": "center"},
-            label_checked_style={"color": "#5c5c5c", "font-weight":"bold"},
+            label_checked_style={"color": "#5c5c5c", "font-weight": "bold"},
             input_checked_style={
                 "backgroundColor": "#8da99c",
                 "borderColor": "#5c5c5c",
@@ -800,13 +815,13 @@ interact_card = dbc.Card(
         ),
         html.Hr(),
         html.H4("Choose metrics",
-                className="card-title", style={"color":"#5a5a5a", "textAlign":"center"}),
+                className="card-title", style={"color": "#5a5a5a", "textAlign": "center"}),
         dbc.Checklist(
             id="metrics",
             options=df_perf_RF['Metric'].tolist(),
             value=df_perf_RF['Metric'].tolist(),
             inputStyle={"margin-right": "20px", "textAlign": "center"},
-            label_checked_style={"color": "#5c5c5c", "font-weight":"bold"},
+            label_checked_style={"color": "#5c5c5c", "font-weight": "bold"},
             input_checked_style={
                 "backgroundColor": "#8da99c",
                 "borderColor": "#5c5c5c",
@@ -814,13 +829,13 @@ interact_card = dbc.Card(
         ),
         html.Hr(),
         html.H4("Show cluster information of selected target or show feature information?",
-                className="card-title", style={"color":"#5a5a5a", "textAlign":"center"}),
+                className="card-title", style={"color": "#5a5a5a", "textAlign": "center"}),
         dbc.RadioItems(
             id="datadescript",
             options=['show cluster info', 'show feature info'],
             value='show feature info',
             inputStyle={"margin-right": "20px", "textAlign": "bottom"},
-            label_checked_style={"color": "#5c5c5c", "font-weight":"bold"},
+            label_checked_style={"color": "#5c5c5c", "font-weight": "bold"},
             input_checked_style={
                 "backgroundColor": "#8da99c",
                 "borderColor": "#5c5c5c",
@@ -833,7 +848,7 @@ interact_card = dbc.Card(
 
 # interactive text with cluster info
 cluster_info_card = dbc.Card([
-    dbc.CardHeader("Feature and cluster information", style={"color":"#5a5a5a", "textAlign":"center"}),
+    dbc.CardHeader("Feature and cluster information", style={"color": "#5a5a5a", "textAlign": "center"}),
     html.Div(),
     cluster_info_text
     ], className="mt-4")
@@ -893,7 +908,7 @@ data_source_card3 = dbc.Card(
 info_card = dbc.Card(
     [
         dbc.CardHeader("General information about the study and the dashboard",
-                       style={"color":"#5c5c5c", "font-weight":"bold"}),
+                       style={"color": "#5c5c5c", "font-weight": "bold"}),
         html.Div([
             dbc.CardBody(learn_text),
             html.Hr(),
@@ -915,7 +930,12 @@ tabs = dbc.Tabs(
             label="Interact",
             className="pb-4",
         ),
-        dbc.Tab([results_card1, data_source_card1, results_card2, data_source_card2, results_card3, data_source_card3], tab_id="tab-3", label="Results"),
+        dbc.Tab([results_card1,
+                 data_source_card1,
+                 results_card2,
+                 data_source_card2,
+                 results_card3,
+                 data_source_card3], tab_id="tab-3", label="Results"),
     ],
     id="tabs",
     active_tab="tab-2",
@@ -950,7 +970,7 @@ app.layout = dbc.Container(
                         "paddingTop": "45px",
                         "paddingBottom": "45px",
                         "marginLeft": "0px",
-                        "marginRight":"0px",
+                        "marginRight": "0px",
                         "textAlign": "center",
                         # "font-family": 'Droid Sans Mono',
                     },
@@ -962,7 +982,8 @@ app.layout = dbc.Container(
                 dbc.Col(tabs, width=12, lg=5, className="mt-4 border"),
                 dbc.Col(
                     [
-                        dcc.Graph(id="hor_bar_plot", className="mb-2", style={"maxHeight":"400px", "overflow":"scroll"}),
+                        dcc.Graph(id="hor_bar_plot", className="mb-2", style={"maxHeight": "400px",
+                                                                              "overflow": "scroll"}),
                         dcc.Graph(id="vert_bar_plot", className="pb-4"),
                         dcc.Graph(id="classmaps", className="pb-4"),
                         dcc.Graph(id="heatmap", className="pb-4"),
@@ -994,7 +1015,6 @@ Callbacks
     Input("target", "value"),
     Input("datadescript", "value")
 )
-
 def update_clusterinfotext(target, datadescript):
     """
             :param target:          name of target feature (str)
@@ -1012,7 +1032,6 @@ def update_clusterinfotext(target, datadescript):
     Input("subset", "value"),
     Input("sortby", "value")
 )
-
 def update_horbarplot(target, subset, sortby):
     """
             :param target:  name of target feature (str)
@@ -1030,7 +1049,6 @@ def update_horbarplot(target, subset, sortby):
     Input("target", "value"),
     Input("metrics", "value"),
 )
-
 def update_vertbarplot(target, metrics):
     """
             :param target:  name of target feature (str)
@@ -1038,7 +1056,7 @@ def update_vertbarplot(target, metrics):
             :return:        updated standard bar plot
     """
 
-    figure = make_vertbarplot(target, metrics," Performance of '{}'".format(target))
+    figure = make_vertbarplot(target, metrics, " Performance of '{}'".format(target))
     return figure
 
 # class maps callback
@@ -1046,14 +1064,13 @@ def update_vertbarplot(target, metrics):
     Output("classmaps", "figure"),
     Input("target", "value"),
 )
-
 def update_classmaps(target):
     """
             :param target:  name of target feature (str)
             :return:        updated class maps
     """
 
-    figure = make_classmaps(target," Performance of '{}'".format(target))
+    figure = make_classmaps(target, " Performance of '{}'".format(target))
     return figure
 
 # heatmap callback
@@ -1061,14 +1078,13 @@ def update_classmaps(target):
     Output("heatmap", "figure"),
     Input("target", "value"),
 )
-
 def update_heatmap(target):
     """
             :param target:  name of target feature (str)
             :return:        updated heat map
     """
 
-    if target=='average':
+    if target == 'average':
         title = 'Original Data'
     else:
         title = target
@@ -1079,3 +1095,4 @@ def update_heatmap(target):
 
 if __name__ == "__main__":
     app.run_server(debug=True)
+

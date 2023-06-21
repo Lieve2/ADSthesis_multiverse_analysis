@@ -1,7 +1,7 @@
 import utility_functions
-import numpy as np
 from ABC_algorithm_SVM import ArtificialBeeColony
 from utility_functions import rosenbrock, rastrigin
+
 
 def test_case1():
 
@@ -49,7 +49,3 @@ def test_case2():
 
 # if __name__ == "__main__":
 #     test_case2()
-
-
-
-

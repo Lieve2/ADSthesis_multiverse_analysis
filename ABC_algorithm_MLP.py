@@ -51,9 +51,9 @@ class ArtificialBee(object):
         t = time.process_time()
 
         # compute fitness
-        if (function != None and isinstance(function, pipeline_MLP.OptRFParameters)):
+        if function is not None and isinstance(function, pipeline_MLP.OptRFParameters):
             self.fitness_val = function.objective_function_value(self.sol_vector)[0][0]
-        elif (function != None and not isinstance(function, pipeline_MLP.OptRFParameters)):
+        elif function is not None and not isinstance(function, pipeline_MLP.OptRFParameters):
             self.fitness_val = function(self.sol_vector)
         else:
             self.fitness_val = sys.float_info.max
@@ -83,7 +83,7 @@ class ArtificialBee(object):
 
         """
 
-        if (self.fitness_val >= 0):
+        if self.fitness_val >= 0:
             self.fitness = 1 / (1 + self.fitness_val)
         else:
             self.fitness = 1 + abs(self.fitness_val)
@@ -102,9 +102,7 @@ class ArtificialBeeColony(object):
 
         """
 
-        cost = {};
-        cost['best'] = [];
-        cost['mean'] = []
+        cost = {'best': [], 'mean': []}
 
         t = time.process_time()
 
@@ -143,7 +141,6 @@ class ArtificialBeeColony(object):
             cost['best'].append(self.best_place)
             cost['mean'].append(sum([b.fitness_val for b in self.colony])/self.nr_emp)
 
-
             # print info if verbose=True
             if self.verbose:
                 self._verbose(iteration, cost)
@@ -157,13 +154,13 @@ class ArtificialBeeColony(object):
                  l_bound,
                  u_bound,
                  function,
-                 hive_size = 30,
-                 max_iterations = 100,
-                 max_trials = None,
-                 custom_function = None,
-                 seed = None,
-                 verbose = False,
-                 additional_pars = None,
+                 hive_size=30,
+                 max_iterations=100,
+                 max_trials=None,
+                 custom_function=None,
+                 seed=None,
+                 verbose=False,
+                 additional_pars=None,
                  ):
 
         """
@@ -175,19 +172,19 @@ class ArtificialBeeColony(object):
         assert (len(u_bound) == len(l_bound)), "upper and lower bound must be a list of the same length."
 
         # generate seed for RNG
-        if (seed == None):
+        if seed is None:
             self.seed = random.randint(0, 1000)
         else:
             self.seed = seed
         random.seed(self.seed)
 
         # compute nr of employees
-        self.nr_emp = int((hive_size + hive_size % 2)) #classic 1:1 ratio
+        self.nr_emp = int((hive_size + hive_size % 2))  # classic 1:1 ratio
 
         # assign algo properties
         self.dim = len(l_bound)
         self.max_iterations = max_iterations
-        if (max_trials == None):
+        if max_trials is None:
             self.max_trials = 0.6 * self.nr_emp * self.dim
         else:
             self.max_trials = max_trials
@@ -226,7 +223,7 @@ class ArtificialBeeColony(object):
 
         i = vals.index(min(vals))
 
-        if (vals[i] < self.best_place):
+        if vals[i] < self.best_place:
             self.best_place = vals[i]
             self.solution = self.colony[i].sol_vector
 
@@ -243,11 +240,11 @@ class ArtificialBeeColony(object):
         max_vals = max(vals)
 
         # compute proba similar to classic ABC by Karaboga
-        if (self.custom_function == None):
+        if self.custom_function is None:
             self.probs = 0.9 * np.array(vals) / max_vals + 0.1
 
         else:
-            if (self.extra_params != None):
+            if self.extra_params is not None:
                 self.probs = self.custom_function(list(vals), **self.additional_pars)
             else:
                 self.probs = self.custom_function(vals)
@@ -265,24 +262,24 @@ class ArtificialBeeColony(object):
         clonebee = copy.deepcopy(self.colony[i])
 
         # draw dimension
-        d = random.randint(0, self.dim - 1) #classic
+        d = random.randint(0, self.dim - 1)  # classic
 
-        if (self.dim > 2):
-            d2 = random.randint(0, self.dim - 1) #add second dim (optim ABC) Alizadegan et al. (2013)
-            d3 = random.randint(0, self.dim - 1) #add third dim (optim ABC) Alizadegan et al. (2013)
+        if self.dim > 2:
+            d2 = random.randint(0, self.dim - 1)  # add second dim (optim ABC) Alizadegan et al. (2013)
+            d3 = random.randint(0, self.dim - 1)  # add third dim (optim ABC) Alizadegan et al. (2013)
 
         # select other bee
-        b_ix = i;
+        b_ix = i
 
-        while (b_ix == i):
+        while b_ix == i:
             b_ix = random.randint(0, self.nr_emp-1)
 
         # produce mutant based on current bee and its friend
-        clonebee.sol_vector[d] = self._mutate(d, i, b_ix) #classic
+        clonebee.sol_vector[d] = self._mutate(d, i, b_ix)  # classic
 
-        if (self.dim > 2):
-            clonebee.sol_vector[d2] = self._mutate(d2, i, b_ix)  #optim second dim Alizadegan et al. (2013)
-            clonebee.sol_vector[d3] = self._mutate(d3, i, b_ix) #optim third dim Alizadegan et al. (2013)
+        if self.dim > 2:
+            clonebee.sol_vector[d2] = self._mutate(d2, i, b_ix)  # optim second dim Alizadegan et al. (2013)
+            clonebee.sol_vector[d3] = self._mutate(d3, i, b_ix)  # optim third dim Alizadegan et al. (2013)
 
         # check boundaries
         clonebee.sol_vector = self._check(clonebee.sol_vector, dim=d)
@@ -292,7 +289,7 @@ class ArtificialBeeColony(object):
         clonebee._fitness()
 
         # crowding (deterministic)
-        if (clonebee.fitness > self.colony[i].fitness):
+        if clonebee.fitness > self.colony[i].fitness:
             self.colony[i] = copy.deepcopy(clonebee)
             self.colony[i].trial_counter = 0
         else:
@@ -304,9 +301,9 @@ class ArtificialBeeColony(object):
         """
 
         # send onlookers
-        n_onl = 0;
+        n_onl = 0
         beta = 0
-        while (n_onl < self.nr_emp):
+        while n_onl < self.nr_emp:
 
             # draw random nr [0-1]
             phi = random.random()
@@ -337,7 +334,7 @@ class ArtificialBeeColony(object):
 
         # select new potential onlooker
         for i in range(self.nr_emp):
-            if (beta < probs[i]):
+            if beta < probs[i]:
                 return i
 
     def send_sct(self):
@@ -352,7 +349,7 @@ class ArtificialBeeColony(object):
         i = trials.index(max(trials))
 
         # check if max nr trials exceeds pre-set max
-        if (trials[i] > self.max_trials):
+        if trials[i] > self.max_trials:
 
             # create new scout bee (at random)
             self.colony[i] = ArtificialBee(self.l_bound, self.u_bound, self.evaluate)
@@ -370,10 +367,8 @@ class ArtificialBeeColony(object):
                 :return:                 mutated solution vector
         """
 
-        return self.colony[index_current].sol_vector[dim]   + \
-                (random.random() - 0.5) * 2                  * \
-                (self.colony[index_current].sol_vector[dim] -
-                self.colony[index_other].sol_vector[dim])
+        return self.colony[index_current].sol_vector[dim] + (random.random() - 0.5) * 2 * \
+               (self.colony[index_current].sol_vector[dim] - self.colony[index_other].sol_vector[dim])
 
     def _check(self, vec, dim=None):
         """
@@ -384,19 +379,18 @@ class ArtificialBeeColony(object):
                 :return:         solution vector
         """
 
-        if (dim == None):
+        if dim is None:
             range_ = range(self.dim)
         else:
             range_ = [dim]
 
         for r in range_:
-
             # check lb
-            if (vec[r] < self.l_bound[r]):
+            if vec[r] < self.l_bound[r]:
                 vec[r] = self.l_bound[r]
 
             # check ub
-            elif (vec[r] > self.u_bound[r]):
+            elif vec[r] > self.u_bound[r]:
                 vec[r] = self.u_bound[r]
 
         return vec
@@ -411,17 +405,3 @@ class ArtificialBeeColony(object):
 
         message = "Iter nr. = {} | Best evaluation value = {} | Mean evaluation value = {} "
         print(message.format(int(iteration), cost['best'][iteration], cost['mean'][iteration]))
-
-
-
-
-
-
-
-
-
-
-
-
-
-

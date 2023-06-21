@@ -26,7 +26,7 @@ test_data2 = pd.DataFrame(vals2, columns=['target Y'], index=c)
 test_data3 = pd.DataFrame(vals3, columns=['target Z'], index=c)
 
 df_importancem1_test = pd.concat([test_data, test_data2, test_data3], axis='columns')
-df_importancem1_test['average'] = df_importancem1_test.mean(axis=1) # calculate average per row
+df_importancem1_test['average'] = df_importancem1_test.mean(axis=1)  # calculate average per row
 
 # ----- make performance data set ----- #
 
@@ -48,16 +48,12 @@ test_data1['average'] = test_data1.mean(axis=1)
 ran = range(1, 20)
 c = ['Feature {0}'.format(s) for s in ran]
 
-vals = np.random.rand(19)
-vals2 = np.random.rand(19)
-vals3 = np.random.rand(19)
-
 test_data = pd.DataFrame(vals, columns=['target X'], index=c)
 test_data2 = pd.DataFrame(vals2, columns=['target Y'], index=c)
 test_data3 = pd.DataFrame(vals3, columns=['target Z'], index=c)
 
 df_importancem2_test = pd.concat([test_data, test_data2, test_data3], axis='columns')
-df_importancem2_test['average'] = df_importancem2_test.mean(axis=1) # calculate average per row
+df_importancem2_test['average'] = df_importancem2_test.mean(axis=1)  # calculate average per row
 
 ran = range(1, 20)
 c = ['Feature {0}'.format(s) for s in ran]
@@ -71,7 +67,7 @@ test_data2 = pd.DataFrame(vals2, columns=['target Y'], index=c)
 test_data3 = pd.DataFrame(vals3, columns=['target Z'], index=c)
 
 df_importancem3_test = pd.concat([test_data, test_data2, test_data3], axis='columns')
-df_importancem3_test['average'] = df_importancem3_test.mean(axis=1) # calculate average per row
+df_importancem3_test['average'] = df_importancem3_test.mean(axis=1)  # calculate average per row
 
 
 # ----- make performance data set for 2nd and 3rd model ----- #
@@ -80,9 +76,6 @@ c = ['target X', 'target Y', 'target Z']
 vals = (np.random.rand(3)).tolist()
 vals2 = (np.random.rand(3)).tolist()
 vals3 = (np.random.rand(3)).tolist()
-vals4 = (np.random.rand(3)).tolist()
-vals5 = (np.random.rand(3)).tolist()
-vals6 = (np.random.rand(3)).tolist()
 
 test_data2 = pd.DataFrame(np.array([vals3, vals4]).T, columns=['accuracy', 'balanced accuracy'], index=c)
 test_data3 = pd.DataFrame(np.array([vals5, vals6]).T, columns=['accuracy', 'balanced accuracy'], index=c)
@@ -138,8 +131,8 @@ data = pd.read_csv('ESS8 data/ESS8_subset_cleaned_timeadj_wmissingvals.csv', low
 # make df with missingness percentage of features with missingness
 missing_cols = data.columns[data.isnull().any()].to_list()
 percent_missing = data[missing_cols].isnull().sum() * 100 / len(data)
-missing_info = pd.DataFrame({'column name':missing_cols,
-                             'percentage missing':percent_missing})
+missing_info = pd.DataFrame({'column name': missing_cols,
+                             'percentage missing': percent_missing})
 
 # extract rows with > 5% missing (74 features)
 many_missing = missing_info[missing_info['percentage missing'] > 5]
@@ -152,13 +145,13 @@ path_imp_RF = str(os.getcwd())+'/feature importance/RF/'
 feat_imp_RF = glob.glob(os.path.join(path_imp_RF, '*.csv'))
 
 df_feat_imp_RF = multi_csv_to_df(feat_imp_RF, axis=1, index_col='Unnamed: 0')
-df_feat_imp_RF = df_feat_imp_RF.iloc[:,::2]
+df_feat_imp_RF = df_feat_imp_RF.iloc[:, ::2]
 df_feat_imp_RF.columns = targets_sorted
 
-df_feat_imp_RF.insert(loc=0, column ='Feature', value=df_feat_imp_RF.index)
+df_feat_imp_RF.insert(loc=0, column='Feature', value=df_feat_imp_RF.index)
 df_feat_imp_RF.reset_index(drop=True, inplace=True)
 
-df_feat_imp_RF.to_csv("dashboardapp/finaldata/importance_RF.csv", index=True) #features
+df_feat_imp_RF.to_csv("dashboardapp/finaldata/importance_RF.csv", index=True)  # features
 
 
 ### ----- model performance RF ----- ###
@@ -167,7 +160,7 @@ path_perf_RF = str(os.getcwd())+'/parameter_search_outputs/RF/'
 perf_RF = glob.glob(os.path.join(path_perf_RF, '*.csv'))
 
 df_perf_RF = multi_csv_to_df(perf_RF, axis=0, index_col=None)
-df_perf_RF.rename(columns={'Unnamed: 0':'model'}, inplace=True)
+df_perf_RF.rename(columns={'Unnamed: 0': 'model'}, inplace=True)
 df_perf_RF = df_perf_RF.loc[df_perf_RF['model'] == 'best model'].reset_index(drop=True)
 df_perf_RF.index = targets_sorted
 df_perf_RF.loc['average'] = df_perf_RF.mean(axis=0, numeric_only=True)
@@ -176,7 +169,7 @@ df_perf_RF = df_perf_RF.T
 df_perf_RF = df_perf_RF.drop(['model', 'number estimators',
                               'max features', 'max depth',
                               'min split', 'min leaf'], axis=0)
-df_perf_RF.insert(loc=0, column ='Metric', value=df_perf_RF.index)
+df_perf_RF.insert(loc=0, column='Metric', value=df_perf_RF.index)
 df_perf_RF.reset_index(drop=True, inplace=True)
 
 df_perf_RF.to_csv("dashboardapp/finaldata/performance_RF.csv", index=False)
@@ -190,7 +183,7 @@ df_feat_imp_RF_c = df_feat_imp_RF.copy()
 
 for target in targets_sorted:
     df_cluster_info = pd.read_csv('clusters info/RF/RF_{}.csv'.format(target))
-    df_cluster_info.rename(columns={'Unnamed: 0':'cluster number'}, inplace=True)
+    df_cluster_info.rename(columns={'Unnamed: 0': 'cluster number'}, inplace=True)
     df_cluster_info.set_index(df_cluster_info.columns[0], inplace=True)
 
     # drop target from list of feature names
@@ -245,10 +238,10 @@ path_imp_SVM = str(os.getcwd())+'/feature importance/SVM/'
 feat_imp_SVM = glob.glob(os.path.join(path_imp_SVM, '*.csv'))
 
 df_feat_imp_SVM = multi_csv_to_df(feat_imp_SVM, axis=1, index_col='Unnamed: 0')
-df_feat_imp_SVM = df_feat_imp_SVM.iloc[:,::2]
+df_feat_imp_SVM = df_feat_imp_SVM.iloc[:, ::2]
 df_feat_imp_SVM.columns = targets_sorted
 
-df_feat_imp_SVM.insert(loc=0, column ='Feature', value=df_feat_imp_SVM.index)
+df_feat_imp_SVM.insert(loc=0, column='Feature', value=df_feat_imp_SVM.index)
 df_feat_imp_SVM.reset_index(drop=True, inplace=True)
 
 df_feat_imp_SVM.to_csv("dashboardapp/finaldata/importance_SVM.csv", index=True)
@@ -259,15 +252,15 @@ path_perf_SVM = str(os.getcwd())+'/parameter_search_outputs/SVM/'
 perf_SVM = glob.glob(os.path.join(path_perf_SVM, '*.csv'))
 
 df_perf_SVM = multi_csv_to_df(perf_SVM, axis=0, index_col=None)
-df_perf_SVM.rename(columns={'Unnamed: 0':'model'}, inplace=True)
+df_perf_SVM.rename(columns={'Unnamed: 0': 'model'}, inplace=True)
 df_perf_SVM = df_perf_SVM.loc[df_perf_SVM['model'] == 'best model'].reset_index(drop=True)
 df_perf_SVM.index = targets_sorted
 df_perf_SVM.loc['average'] = df_perf_SVM.mean(axis=0, numeric_only=True)
 
 df_perf_SVM = df_perf_SVM.T
-df_perf_SVM = df_perf_SVM.drop(['model', 'C','gamma'], axis=0)
+df_perf_SVM = df_perf_SVM.drop(['model', 'C', 'gamma'], axis=0)
 
-df_perf_SVM.insert(loc=0, column ='Metric', value=df_perf_SVM.index)
+df_perf_SVM.insert(loc=0, column='Metric', value=df_perf_SVM.index)
 df_perf_SVM.reset_index(drop=True, inplace=True)
 
 df_perf_SVM.to_csv("dashboardapp/finaldata/performance_SVM.csv", index=False)
@@ -279,7 +272,7 @@ df_feat_imp_SVM_c = df_feat_imp_SVM.copy()
 
 for target in targets_sorted:
     df_cluster_info = pd.read_csv('clusters info/SVM/SVM_{}.csv'.format(target))
-    df_cluster_info.rename(columns={'Unnamed: 0':'cluster number'}, inplace=True)
+    df_cluster_info.rename(columns={'Unnamed: 0': 'cluster number'}, inplace=True)
     df_cluster_info.set_index(df_cluster_info.columns[0], inplace=True)
 
     # drop target from list of feature names
@@ -323,10 +316,10 @@ for target in targets_sorted:
         r += 1
 
 # calculate average importance per feature and add it to the df
-df_feat_imp_SVM_c['average'] = df_feat_imp_SVM_c.mean(axis=1, skipna=True, numeric_only=True) #, numeric_only=True
+df_feat_imp_SVM_c['average'] = df_feat_imp_SVM_c.mean(axis=1, skipna=True, numeric_only=True)
 
 # store data as csv
-df_feat_imp_SVM_c.to_csv("dashboardapp/finaldata/complete_importance_SVM.csv", index=False) #features
+df_feat_imp_SVM_c.to_csv("dashboardapp/finaldata/complete_importance_SVM.csv", index=False)
 
 
 ### ----- feature importance MLP ----- ###
@@ -335,10 +328,10 @@ path_imp_MLP = str(os.getcwd())+'/feature importance/MLP/'
 feat_imp_MLP = glob.glob(os.path.join(path_imp_MLP, '*.csv'))
 
 df_feat_imp_MLP = multi_csv_to_df(feat_imp_MLP, axis=1, index_col='Unnamed: 0')
-df_feat_imp_MLP = df_feat_imp_MLP.iloc[:,::2]
+df_feat_imp_MLP = df_feat_imp_MLP.iloc[:, ::2]
 df_feat_imp_MLP.columns = targets_sorted
 
-df_feat_imp_MLP.insert(loc=0, column ='Feature', value=df_feat_imp_MLP.index)
+df_feat_imp_MLP.insert(loc=0, column='Feature', value=df_feat_imp_MLP.index)
 df_feat_imp_MLP.reset_index(drop=True, inplace=True)
 
 # store data as csv
@@ -351,17 +344,17 @@ path_perf_MLP = str(os.getcwd())+'/parameter_search_outputs/MLP/'
 perf_MLP = glob.glob(os.path.join(path_perf_MLP, '*.csv'))
 
 df_perf_MLP = multi_csv_to_df(perf_MLP, axis=0, index_col=None)
-df_perf_MLP.rename(columns={'Unnamed: 0':'model'}, inplace=True)
+df_perf_MLP.rename(columns={'Unnamed: 0': 'model'}, inplace=True)
 df_perf_MLP = df_perf_MLP.loc[df_perf_MLP['model'] == 'best model'].reset_index(drop=True)
 df_perf_MLP.index = targets_sorted
 df_perf_MLP.loc['average'] = df_perf_MLP.mean(axis=0, numeric_only=True)
 
 
 df_perf_MLP = df_perf_MLP.T
-df_perf_MLP = df_perf_MLP.drop(['model','number units', 'L2 regularization',
+df_perf_MLP = df_perf_MLP.drop(['model', 'number units', 'L2 regularization',
                                 'learning rate', 'beta 1', 'beta 2'], axis=0)
 
-df_perf_MLP.insert(loc=0, column ='Metric', value=df_perf_MLP.index)
+df_perf_MLP.insert(loc=0, column='Metric', value=df_perf_MLP.index)
 df_perf_MLP.reset_index(drop=True, inplace=True)
 
 # store data as csv
@@ -374,7 +367,7 @@ df_feat_imp_MLP_c = df_feat_imp_MLP.copy()
 
 for target in targets_sorted:
     df_cluster_info = pd.read_csv('clusters info/MLP/MLP_{}.csv'.format(target))
-    df_cluster_info.rename(columns={'Unnamed: 0':'cluster number'}, inplace=True)
+    df_cluster_info.rename(columns={'Unnamed: 0': 'cluster number'}, inplace=True)
     df_cluster_info.set_index(df_cluster_info.columns[0], inplace=True)
 
     # drop target from list of feature names
@@ -422,9 +415,4 @@ for target in targets_sorted:
 df_feat_imp_MLP_c['average'] = df_feat_imp_MLP_c.mean(axis=1, skipna=True, numeric_only=True)
 
 # store data as csv
-df_feat_imp_MLP_c.to_csv("dashboardapp/finaldata/complete_importance_MLP.csv", index=False) #features
-
-
-
-
-
+df_feat_imp_MLP_c.to_csv("dashboardapp/finaldata/complete_importance_MLP.csv", index=False)

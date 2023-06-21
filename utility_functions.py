@@ -4,6 +4,8 @@ from random import random
 import numpy as np
 import pandas as pd
 from category_encoders import OrdinalEncoder, TargetEncoder
+from matplotlib import pyplot as plt
+from matplotlib.font_manager import FontProperties
 from scipy.cluster import hierarchy
 from scipy.cluster._optimal_leaf_ordering import squareform
 from scipy.stats import spearmanr
@@ -25,10 +27,11 @@ def random_imputation(df):
     for c in df_imp.columns:
         data = df_imp[c]
         mask = data.isnull()
-        imputations = random.choices(data[~mask].values, k = mask.sum())
+        imputations = random.choices(data[~mask].values, k=mask.sum())
         data[mask] = imputations
 
         return df_imp
+
 
 def permutate_features(X, threshold):
     """
@@ -45,13 +48,12 @@ def permutate_features(X, threshold):
     corr = (corr + corr.T) / 2
     np.fill_diagonal(corr, 1)
 
-
     # distance matrix and linkage with Ward's
     dist_matrix = 1 - np.abs(corr)
     dist_link = hierarchy.ward(squareform(dist_matrix))
 
     # group features in clusters and keep one feature per cluster
-    cluster_ids =hierarchy.fcluster(dist_link, threshold, criterion='distance')
+    cluster_ids = hierarchy.fcluster(dist_link, threshold, criterion='distance')
     cluster_id_to_feat_id = defaultdict(list)
 
     for idx, cluster_id in enumerate(cluster_ids):
@@ -61,6 +63,7 @@ def permutate_features(X, threshold):
     X_new = X.iloc[:, selected_features]
 
     return X_new, cluster_id_to_feat_id
+
 
 def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
     """
@@ -73,7 +76,6 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
                                     features (list with features present in X_new),
                                     clusters (list with cluster information)
     """
-
 
     # encode objects in data
     enc = OrdinalEncoder()
@@ -114,13 +116,14 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
     features_compl = X.columns
 
     # scale/encode the observed data
-    X_scaled = pd.DataFrame(preprocessor.fit_transform(X,y), columns=features_compl)
+    X_scaled = pd.DataFrame(preprocessor.fit_transform(X, y), columns=features_compl)
 
     # remove multicollinearity
     X_new, clusters = permutate_features(X_scaled, threshold)
     features = X_new.columns
 
     return X_new, y, features, clusters
+
 
 def rosenbrock(vector, a=1, b=100):
     """
@@ -153,9 +156,10 @@ def rastrigin(vector):
 
 def multi_csv_to_df(files, axis=0, index_col=None):
     """
-            :param files:   list of csv file paths
-            :param axis:    on what axis to aggregate the files (rows (0) or columns (1))
-            :return:        a single data frame of the aggregated csv files
+            :param files:       list of csv file paths
+            :param axis:        on what axis to aggregate the files (rows (0) or columns (1))
+            :param index_col:   index column to use, if applicable
+            :return:            a single data frame of the aggregated csv files
     """
 
     lst = []
@@ -170,3 +174,25 @@ def multi_csv_to_df(files, axis=0, index_col=None):
     df_results = pd.concat(lst, axis=axis, ignore_index=True)
     return df_results
 
+
+def ConvergencePlot(cost):
+    """
+    Monitors convergence.
+    Parameters:
+    ----------
+        :param dict cost: mean and best cost over cycles/generations as returned
+                          by an optimiser.
+    """
+
+    font = FontProperties()
+    font.set_size('larger')
+    labels = ["Best Cost Function", "Mean Cost Function"]
+    plt.figure(figsize=(12.5, 4))
+    plt.plot(range(len(cost["best"])), cost["best"], label=labels[0])
+    plt.scatter(range(len(cost["mean"])), cost["mean"], color='red', label=labels[1])
+    plt.xlabel("Iteration #")
+    plt.ylabel("Value [-]")
+    plt.legend(loc="best", prop=font)
+    plt.xlim([0, len(cost["mean"])])
+    plt.grid()
+    plt.show()

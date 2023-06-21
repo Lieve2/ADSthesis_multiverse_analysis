@@ -1,4 +1,5 @@
 import joblib
+import warnings
 from sklearn.ensemble import BaggingClassifier
 from ABC_algorithm_SVM import ArtificialBeeColony
 from localized_classmap import plotExplanations
@@ -13,10 +14,7 @@ import pandas as pd
 import time
 import shap
 shap.initjs()
-
-import warnings
 warnings.filterwarnings("ignore")
-
 
 
 def Trainer(X_train, y_train, pars):
@@ -28,7 +26,7 @@ def Trainer(X_train, y_train, pars):
     """
 
     # classifier = SVC(C=pars[0], gamma=pars[1])
-    classifier = BaggingClassifier(base_estimator=SVC(C=pars[0], gamma=pars[1], probability=True), #changed prob
+    classifier = BaggingClassifier(base_estimator=SVC(C=pars[0], gamma=pars[1], probability=True),
                                    n_estimators=20, random_state=144,
                                    n_jobs=-1, max_samples=0.05, bootstrap=False)
 
@@ -43,6 +41,7 @@ def Trainer(X_train, y_train, pars):
         clf = classifier.fit(X_train, y_train)
 
     return clf
+
 
 def Tester(clf, X_test, y_test):
     """
@@ -70,7 +69,6 @@ def Tester(clf, X_test, y_test):
     return miscalc, true, predicted
 
 
-
 def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False):
     """
             :param X_train:         observed training data (df)
@@ -84,7 +82,7 @@ def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False)
 
     classification = Trainer(X_train, y_train, pars)
 
-    if feat_importance==True:
+    if feat_importance is True:
         with parallel_backend('threading', n_jobs=-1):
 
             # set to 75, 35
@@ -104,6 +102,7 @@ def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False)
         classmap = None
 
     return Tester(classification, X_test, y_test), importances, classification, classmap
+
 
 def BestParMeasures(true, predicted):
     """
@@ -129,6 +128,7 @@ def BestParMeasures(true, predicted):
     matthews = matthews_corrcoef(true, predicted)
 
     return acc, bal_acc, ROC, f1, conf_matrix, matthews
+
 
 class OptSVMParameters(AbstractWrapper):
 
@@ -180,11 +180,11 @@ def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test):
     pars = abc.solution
     fitness = abc.best_place
 
-
     message = "Best parameters = {} \nBest evaluation value (Matthews misclassification rate) = {} "
     print(message.format(list(pars), float(fitness)))
 
     return pars, fitness
+
 
 def KfoldCV(k, X, y, filename, features):
     """
@@ -269,7 +269,6 @@ def KfoldCV(k, X, y, filename, features):
     # store important info and continue test phase
     best_pars = df_pars.loc[[best]].values.flatten().tolist()
 
-
     ## test phase (train on whole training set test with left out test set)
     res2 = SearchingPars(X_train, y_train, X_test, y_test, best_pars, feat_importance=True)  # adjust pars
 
@@ -298,8 +297,3 @@ def KfoldCV(k, X, y, filename, features):
 
     elapsed_t = time.process_time() - t
     print(f"Elapsed time test phase: {elapsed_t} sec")
-
-
-
-
-

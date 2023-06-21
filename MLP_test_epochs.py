@@ -43,6 +43,7 @@ def epoch_test(data, targets, threshold, num_feat, classifier):
         plt.savefig('figures/justification_epochs_{}.png'.format(target), dpi=300, bbox_inches='tight')
         plt.show()
 
+
 ### ----- define the input variables and run the test ----- ###
 
 data3 = pd.read_csv('ESS8 data/ESS8_subset_cleaned_timeadj_wmissingvals.csv', low_memory=False)
@@ -50,40 +51,33 @@ data3 = pd.read_csv('ESS8 data/ESS8_subset_cleaned_timeadj_wmissingvals.csv', lo
 # make df with missingness percentage of features with missingness
 missing_cols = data3.columns[data3.isnull().any()].to_list()
 percent_missing = data3[missing_cols].isnull().sum() * 100 / len(data3)
-missing_info = pd.DataFrame({'column name':missing_cols,
-                             'percentage missing':percent_missing})
+missing_info = pd.DataFrame({'column name': missing_cols,
+                             'percentage missing': percent_missing})
 
 # extract rows with > 5% missing (75 features)
 many_missing = missing_info[missing_info['percentage missing'] > 5]
 
 targets3 = many_missing['column name'].tolist()
 
-num_feat = ['dweight', 'pspwght','pweight', 'anweight', 'nwspol',
-            'netustm','agea', 'eduyrs', 'wkhct', 'wkhtot',
+num_feat = ['dweight', 'pspwght', 'pweight', 'anweight', 'nwspol',
+            'netustm', 'agea', 'eduyrs', 'wkhct', 'wkhtot',
             'wkhtotp', 'inwtm']
 
-classifier = classifier = MLPClassifier(hidden_layer_sizes=(100, 50, 25, 13), #hidden_layers
-                               activation='logistic', #sigmoid
-                               solver='adam',
-                               alpha=0.01, #regularization (maybe as second par?)
-                               batch_size=2048,
-                               learning_rate_init=0.001,
-                               max_iter=500, #nr epochs
-                               shuffle=True,
-                               random_state=144,
-                               tol = 0.0001, #optim tolerance (default used)
-                               warm_start=True,
-                               early_stopping=False, #set to true if want to validate (10%) within
-                               beta_1=0.95,
-                               beta_2=0.95,
-                               n_iter_no_change=20 # default nr epochs for tol
-                               )
+classifier = MLPClassifier(hidden_layer_sizes=(100, 50, 25, 13),  # hidden_layers
+                           activation='logistic',  # sigmoid
+                           solver='adam',
+                           alpha=0.01,  # regularization (maybe as second par?)
+                           batch_size=2048,
+                           learning_rate_init=0.001,
+                           max_iter=500,  # nr epochs
+                           shuffle=True,
+                           random_state=144,
+                           tol=0.0001,  # optim tolerance (default used)
+                           warm_start=True,
+                           early_stopping=False,  # set to true if want to validate (10%) within
+                           beta_1=0.95,
+                           beta_2=0.95,
+                           n_iter_no_change=20  # default nr epochs for tol
+                           )
 
 epoch_test(data=data3, targets=['occf14b'], num_feat=num_feat, threshold=1, classifier=classifier)
-
-
-
-
-
-
-

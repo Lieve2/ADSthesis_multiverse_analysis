@@ -5,6 +5,7 @@ from utility_functions import encode_scale_data_perm
 
 ## ------- define processing pipeline function --------- ##
 
+
 def processing_pipeline_MLP(data, targets, threshold, filename, num_feat):
     """
             Overarching function for running the entire processing pipeline
@@ -39,32 +40,24 @@ def processing_pipeline_MLP(data, targets, threshold, filename, num_feat):
 
 ## ------- run modeling pipeline --------- ##
 
+
 # load data
 data = pd.read_csv('ESS8 data/ESS8_subset_cleaned_timeadj_wmissingvals.csv', low_memory=False)
 
 # make df with missingness percentage of features with missingness
 missing_cols = data.columns[data.isnull().any()].to_list()
 percent_missing = data[missing_cols].isnull().sum() * 100 / len(data)
-missing_info = pd.DataFrame({'column name':missing_cols,
-                             'percentage missing':percent_missing})
+missing_info = pd.DataFrame({'column name': missing_cols,
+                             'percentage missing': percent_missing})
 
 # extract rows with > 5% missing (75 features) and set as targets
 many_missing = missing_info[missing_info['percentage missing'] > 5]
 targets = many_missing['column name'].tolist()
 
 # define numerical features
-num_feat = ['dweight', 'pspwght','pweight', 'anweight', 'nwspol',
-            'netustm','agea', 'eduyrs', 'wkhct', 'wkhtot',
+num_feat = ['dweight', 'pspwght', 'pweight', 'anweight', 'nwspol',
+            'netustm', 'agea', 'eduyrs', 'wkhct', 'wkhtot',
             'wkhtotp', 'inwtm']
 
 # start the modeling pipeline
 processing_pipeline_MLP(data=data, targets=targets, num_feat=num_feat, threshold=1, filename='MLP')
-
-
-
-
-
-
-
-
-
