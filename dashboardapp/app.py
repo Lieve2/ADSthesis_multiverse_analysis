@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from dash import Dash, dcc, html, dash_table, Input, Output, State, callback_context
+from dash import Dash, dcc, html, dash_table, Input, Output
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import pandas as pd
 from dash.dash_table.Format import Format
-from plotly.graph_objs import Layout
 from plotly.subplots import make_subplots
-from scipy.stats import norm, spearmanr
+from scipy.stats import norm
 
 import about
 
@@ -19,15 +18,10 @@ App initialization / general info
 app_description = """
 Using Multiverse Analysis for Estimating Response Models Thesis Dashboard"""
 app_title = "Multiverse Analysis for Estimating Response Models Visualizer"
-app_image = "https://www.multiverseanalysis.app/assets/app.png" #update this to own image
+app_image = "figures/dashboard.png"
 
-metas = [ # this should all be updated!!!
+metas = [
     {"name": "viewport", "content": "width=device-width, initial-scale=1"},
-    {"property": "twitter:card", "content": "summary_large_image"},
-    {"property": "twitter:url", "content": "https://www.multiverseanalysis.app/"},
-    {"property": "twitter:title", "content": app_title},
-    {"property": "twitter:description", "content": app_description},
-    {"property": "twitter:image", "content": app_image},
     {"property": "og:title", "content": app_title},
     {"property": "og:type", "content": "website"},
     {"property": "og:description", "content": app_description},
