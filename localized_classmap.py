@@ -1,6 +1,6 @@
-__doc__ = """this code is made by Nura Kawa and based on the original class map 
+__doc__ = """this code is adapted from the code made by Nura Kawa, based on the original class map 
 described by Raymaekers et al. (2021), which is available on CRAN as the R package 'classmap'.
-The below code is an extension of the original class map and has a python implementation (which is the code below)."""
+The below code is an extension of the original class map and has a python implementation."""
 
 # load libraries
 import numpy as np
