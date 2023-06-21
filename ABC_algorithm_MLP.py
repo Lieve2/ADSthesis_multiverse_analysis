@@ -3,6 +3,7 @@ import sys
 import copy
 import numpy as np
 import time
+import pipeline_MLP
 
 # ---- Important information ---- #
 
@@ -28,11 +29,21 @@ The inspirational Hive code can be found here: https://github.com/rwuilbercq/Hiv
 
 # single bee
 class ArtificialBee(object):
-    """Create artificial bee object."""
+    """
+            Create artificial bee object.
+
+    """
 
     def __init__(self, l_bound, u_bound, function):
 
-        """Random instantiation of artificial bee object."""
+        """
+                Random instantiation of artificial bee object.
+
+                :param l_bound:     lower bound
+                :param u_bound:     upper bound
+                :param function:    optimization function
+
+        """
 
         # random solution vector
         self._random(l_bound, u_bound)
@@ -40,9 +51,9 @@ class ArtificialBee(object):
         t = time.process_time()
 
         # compute fitness
-        if (function != None and isinstance(function, parameter_search_DNN_sklearn.OptRFParameters)):
+        if (function != None and isinstance(function, pipeline_MLP.OptRFParameters)):
             self.fitness_val = function.objective_function_value(self.sol_vector)[0][0]
-        elif (function != None and not isinstance(function, parameter_search_DNN_sklearn.OptRFParameters)):
+        elif (function != None and not isinstance(function, pipeline_MLP.OptRFParameters)):
             self.fitness_val = function(self.sol_vector)
         else:
             self.fitness_val = sys.float_info.max
@@ -56,12 +67,21 @@ class ArtificialBee(object):
         self.trial_counter = 0
 
     def _random(self, l_bound, u_bound):
-        """Random initialization of solution vector."""
+        """
+                Random initialization of solution vector.
+
+                :param l_bound:     lower bound
+                :param u_bound:     upper bound
+
+        """
 
         self.sol_vector = np.array(l_bound) + random.random() * (np.array(u_bound) - np.array(l_bound))
 
     def _fitness(self):
-        """Evaluate fitness of solution vector. """
+        """
+                Evaluate fitness of solution vector.
+
+        """
 
         if (self.fitness_val >= 0):
             self.fitness = 1 / (1 + self.fitness_val)
@@ -70,10 +90,17 @@ class ArtificialBee(object):
 
 
 class ArtificialBeeColony(object):
-    """Create ABC algorithm. """
+    """
+            Create ABC algorithm.
+    """
 
     def run(self):
-        """Run the ABC algorithm. """
+        """
+                Run the ABC algorithm.
+
+                :return:    the cost
+
+        """
 
         cost = {};
         cost['best'] = [];
@@ -139,7 +166,10 @@ class ArtificialBeeColony(object):
                  additional_pars = None,
                  ):
 
-        """Instantiate bee hive object. """
+        """
+                Instantiate bee hive object.
+
+        """
 
         # check input
         assert (len(u_bound) == len(l_bound)), "upper and lower bound must be a list of the same length."
@@ -187,7 +217,10 @@ class ArtificialBeeColony(object):
         self.verbose = verbose
 
     def find_best_bee(self):
-        """Find current best. """
+        """
+                Find current best.
+
+        """
 
         vals = [b.fitness_val for b in self.colony]
 
@@ -198,8 +231,12 @@ class ArtificialBeeColony(object):
             self.solution = self.colony[i].sol_vector
 
     def comp_prob(self):
-        """Compute relative chance a given solution is
-        chosen by another onlooker bee in 4th phase (employees back in hive)."""
+        """
+                Compute relative chance a given solution is chosen by another
+                onlooker bee in 4th phase (employees back in hive).
+
+                :return:     probability intervals
+        """
 
         # retrieve fitness in-hive bees
         vals = [b.fitness for b in self.colony]
@@ -219,8 +256,10 @@ class ArtificialBeeColony(object):
         return [sum(self.probs[:i+1]) for i in range(self.nr_emp)]
 
     def send_emp(self, i):
-        """2nd phase: new candidate solutions produced and
-        solution is updated if applicable. """
+        """
+                2nd phase: new candidate solutions produced and
+                solution is updated if applicable.
+        """
 
         # deepcopy current bee solution vector
         clonebee = copy.deepcopy(self.colony[i])
@@ -260,7 +299,9 @@ class ArtificialBeeColony(object):
             self.colony[i].trial_counter += 1
 
     def send_onl(self):
-        """Locally improve solution path."""
+        """
+                Locally improve solution path.
+        """
 
         # send onlookers
         n_onl = 0;
@@ -284,7 +325,12 @@ class ArtificialBeeColony(object):
             n_onl += 1
 
     def recruit(self, beta):
-        """Recruit onlooker bees using roulette wheel selection."""
+        """
+                Recruit onlooker bees using roulette wheel selection.
+
+                :param beta:    value to compare probability with
+                :return:        new potential onlooker
+        """
 
         # (re)compute proba intervals after each onlooker
         probs = self.comp_prob()
@@ -295,7 +341,9 @@ class ArtificialBeeColony(object):
                 return i
 
     def send_sct(self):
-        """Abandon bees exceeding trials limit."""
+        """
+                Abandon bees exceeding trials limit.
+        """
 
         # retrieve nr trials for all bees
         trials = [self.colony[i].trial_counter for i in range(self.nr_emp)]
@@ -313,7 +361,14 @@ class ArtificialBeeColony(object):
             self.send_emp(i)
 
     def _mutate(self, dim, index_current, index_other):
-        """Mutate given solution vector. """
+        """
+                Mutate given solution vector.
+
+                :param dim:             dimension
+                :param index_current:   index value of current bee
+                :param index_other:     index value of other bee
+                :return:                 mutated solution vector
+        """
 
         return self.colony[index_current].sol_vector[dim]   + \
                 (random.random() - 0.5) * 2                  * \
@@ -321,7 +376,13 @@ class ArtificialBeeColony(object):
                 self.colony[index_other].sol_vector[dim])
 
     def _check(self, vec, dim=None):
-        """Check if solution vector is contained within pre-set bounds."""
+        """
+                Check if solution vector is contained within pre-set bounds.
+
+                :param vec:     solution vector
+                :param dim:     dimension
+                :return:         solution vector
+        """
 
         if (dim == None):
             range_ = range(self.dim)
@@ -341,7 +402,12 @@ class ArtificialBeeColony(object):
         return vec
 
     def _verbose(self, iteration, cost):
-        """Display info."""
+        """
+                Display info.
+
+                :param iteration:   iteration number
+                :param cost:        cost in current iteration
+        """
 
         message = "Iter nr. = {} | Best evaluation value = {} | Mean evaluation value = {} "
         print(message.format(int(iteration), cost['best'][iteration], cost['mean'][iteration]))

@@ -1,11 +1,12 @@
 import time
 import pandas as pd
-from pipeline_MLP import KfoldCV
 from utility_functions import encode_scale_data_perm
+from pipeline_SVM import KfoldCV
+
 
 ## ------- define processing pipeline function --------- ##
 
-def processing_pipeline_MLP(data, targets, threshold, filename, num_feat):
+def processing_pipeline_SVM(data, targets, threshold, filename, num_feat):
     """
             Overarching function for running the entire processing pipeline
 
@@ -18,12 +19,11 @@ def processing_pipeline_MLP(data, targets, threshold, filename, num_feat):
 
     for target in targets:
 
-        # extract pre-processsed data, subset of features used, and cluster info
         X, y, features, clusters = encode_scale_data_perm(data, target, threshold, num_feat)
 
-        # store cluster info in csv file
         df_clusters = pd.DataFrame.from_dict(clusters, orient='index')
-        df_clusters.to_csv('clusters info/MLP/{}_{}.csv'.format(filename, target))
+
+        df_clusters.to_csv('clusters info/SVM/{}_{}.csv'.format(filename, target))
 
         # timer - start
         t = time.process_time()
@@ -58,13 +58,5 @@ num_feat = ['dweight', 'pspwght','pweight', 'anweight', 'nwspol',
             'wkhtotp', 'inwtm']
 
 # start the modeling pipeline
-processing_pipeline_MLP(data=data, targets=targets, num_feat=num_feat, threshold=1, filename='MLP')
-
-
-
-
-
-
-
-
+processing_pipeline_SVM(data=data, targets=targets, num_feat=num_feat, threshold=1, filename='SVM')
 

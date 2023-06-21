@@ -12,11 +12,10 @@ from scipy.stats import norm
 
 def compPAC(model, X, y):
     """
-    :param model: sklearn model fitted to training data.
-                  model must have "probability=True" when initialized.
-    :param X:     dataset for prediction, usually a held-out test set
-    :param y:     labels corresponding to X; must be numpy array
-    :return:      Probability of Alternative Classification (PAC) from the trained classifier
+            :param model: sklearn model, with probabilities, fitted to training data
+            :param X:     (test) data for prediction (df)
+            :param y:     true categories in target feature (array)
+            :return:      Probability of Alternative Classification (PAC) from the trained classifier
     """
 
     # parameters
@@ -49,11 +48,11 @@ def compPAC(model, X, y):
 
 def compLocalFarness(X, y, k, metric='euclidean'):
     """
-    :param X:       dataset for prediction, should be the same as what was used for PAC
-    :param y:       corresponding labels of X
-    :param k:       number of nearest neighbors to consider for localized farness computation
-    :param metric:  distance metric for nearest neighbor search.
-    :return:        localized farness computed from the data, independent of classifier
+            :param X:       data for prediction, should be the same as what was used for PAC
+            :param y:       corresponding labels of X
+            :param k:       number of nearest neighbors to consider for localized farness computation
+            :param metric:  distance metric for nearest neighbor search.
+            :return:        localized farness computed from the data, independent of classifier
     """
 
     # find nearest neighbors with KD Tree
@@ -88,12 +87,12 @@ def compLocalFarness(X, y, k, metric='euclidean'):
 
 def plotExplanations(model, X, y, cl, k=10, annotate=False):
     """
-    :param model: fitted sklearn model
-    :param X: data for the model to make predictions
-    :param y: corresponding labels to X
-    :param cl: class, must be one of the classes in y
-    :param k: parameter for localized farness. Number of nearest neighbors
-    :return: localized class map of model X for elements of class cl in data X
+            :param model:   fitted sklearn model
+            :param X:       data for the model to make predictions
+            :param y:       corresponding labels to X
+            :param cl:      class, must be one of the classes in y
+            :param k:       parameter for localized farness. Number of nearest neighbors
+            :return:        data of localized class map of model X for elements of class cl in data X (df)
     """
 
     # to rescale LF for plot, we use qfunc,
@@ -123,55 +122,6 @@ def plotExplanations(model, X, y, cl, k=10, annotate=False):
     nlab = len(np.unique(y))
     palette = ["#fd7e14", "#446e9b"]
     colors = np.array([palette[i] for i in model_preds[y == cl]])
-    #
-    # # initialize plot
-    #
-    # # plot points colored by predicted class
-    # plt.scatter(y=PAC_cl, x=aLF_cl, c=colors)
-    #
-    # # add title and accuracy information
-    # plt.suptitle("Localized Class Map, class " + str(cl))#+ '\n' +
-    # plt.title('Model Accuracy: ' + str(model_acc*100) + '% ' +
-    #              'Class Accuracy: ' + str(class_acc*100)+'%',
-    #           fontsize=10)
-    #
-    # # x-axis
-    # plt.xlim(-0.05, qfunc(1)+0.01)
-    # plot_probs = np.array([0, 0.5, 0.75, 0.9, 0.99, 0.999, 1])
-    # plt.xticks(qfunc(plot_probs), plot_probs)
-    # plt.xlabel('Localized Farness')
-    #
-    # # y-axis
-    # plt.ylim(-0.01,1.05)
-    # plt.yticks([0,0.25,0.5,0.75,1.0], [0,0.25,0.5,0.75,1.0])
-    # plt.ylabel("Pr[Alternative Class]")
-    #
-    # # add vertical line
-    # plt.axvline(x=qfunc(0.99), ls=':', color='grey')
-    #
-    # # add horizontal line
-    # plt.axhline(y=0.5, ls=':', color='grey')
-    #
-    # # add legend
-    # ptchs = []
-    # for c in range(nlab):
-    #     ptchs.append(mpatches.Patch(color=palette[c],
-    #                                 label=c))
-    # plt.legend(handles=ptchs,
-    #            loc=0,
-    #            title='Predicted Class')
-    # plt.rcParams["legend.fontsize"] = 6
-    #
-    # # annotations
-    # labels = np.array(['['+str(i)+']' for i in range(len(y))])
-    # labels = labels[y == cl]
-    #
-    # if annotate:
-    #     for i in range(len(PAC_cl)):
-    #         if (aLF_cl[i] >= qfunc(0.75)):
-    #             plt.text(aLF_cl[i], PAC_cl[i], labels[i],size=6)
-    #
-    # plt.show()
 
     data = {'class':cl,
             'prob alternative':PAC_cl,
@@ -181,7 +131,6 @@ def plotExplanations(model, X, y, cl, k=10, annotate=False):
             'class perf':class_perf,
             'n labels':nlab}
 
-    # print(data)
     df_results = pd.DataFrame(data)
-    # print(df_results)
+
     return df_results

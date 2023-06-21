@@ -1,33 +1,11 @@
 import glob
 import os.path
-
 import numpy as np
 import pandas
 import pandas as pd
+from utility_functions import multi_csv_to_df
 
 pandas.set_option('display.max_rows', 188)
-
-
-# ----- functions ------ #
-
-def multi_csv_to_df(files, axis=0, index_col=None):
-    """
-        :param files: list of csv file paths
-        :param axis:  on what axis to aggregate the files (rows (0) or columns (1))
-        :return:      a single data frame of the aggregated csv files
-        """
-
-    lst = []
-
-    # files to alphabetical order
-    files_sorted = sorted(files)
-
-    for filename in files_sorted:
-        df = pd.read_csv(filename, index_col=index_col, header=0)
-        lst.append(df)
-
-    df_results = pd.concat(lst, axis=axis, ignore_index=True)
-    return df_results
 
 
 # ----- extract feature info data ----- #
@@ -35,6 +13,7 @@ def multi_csv_to_df(files, axis=0, index_col=None):
 df_featureinfo = pd.read_csv('dashboardapp/finaldata/feature_info.csv', sep=';')
 
 # ----- make importance test data set ----- #
+
 ran = range(1, 20)
 c = ['Feature {0}'.format(s) for s in ran]
 

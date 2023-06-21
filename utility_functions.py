@@ -14,14 +14,12 @@ from sklearn.preprocessing import StandardScaler
 import warnings
 warnings.filterwarnings("ignore")
 
-# voor beschrijving functions:
-# """
-#         :param files: list of csv file paths
-#         :param axis:  on what axis to aggregate the files (rows (0) or columns (1))
-#         :return:      a single data frame of the aggregated csv files
-#         """
 
 def random_imputation(df):
+    """
+            :param df:      a data frame with missing values
+            :return:        complete data frame, where missing values are imputed by random imputation
+    """
 
     df_imp = df.copy()
     for c in df_imp.columns:
@@ -33,7 +31,14 @@ def random_imputation(df):
         return df_imp
 
 def permutate_features(X, threshold):
+    """
+            :param X:           the observed data (df)
+            :param threshold:   the (cut) level for clustering
+            :return:            X_new (the subset of observed data),
+                                cluster_id_to_feat_id (list with cluster info)
+    """
 
+    # calculate correlation
     corr = spearmanr(X).correlation
 
     # ensure symmetry
@@ -48,6 +53,7 @@ def permutate_features(X, threshold):
     # group features in clusters and keep one feature per cluster
     cluster_ids =hierarchy.fcluster(dist_link, threshold, criterion='distance')
     cluster_id_to_feat_id = defaultdict(list)
+
     for idx, cluster_id in enumerate(cluster_ids):
         cluster_id_to_feat_id[cluster_id].append(idx)
     selected_features = [v[0] for v in cluster_id_to_feat_id.values()]
@@ -57,10 +63,20 @@ def permutate_features(X, threshold):
     return X_new, cluster_id_to_feat_id
 
 def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
+    """
+            :param data:            the complete data set
+            :param tuning_target:   the target feature
+            :param threshold:       the (cut) level for clustering
+            :param num_feat:        a list with numeric features
+            :return:                X_new (the complete and scaled/encoded subset of observed data)
+                                    y (the binarized target feature),
+                                    features (list with features present in X_new),
+                                    clusters (list with cluster information)
+    """
+
 
     # encode objects in data
     enc = OrdinalEncoder()
-    #data_obj = data.select_dtypes(include=object)
     data_obj = data[data.columns.intersection(num_feat)]
     enc.fit(data_obj)
     encoding = enc.fit_transform(data[data_obj.columns])
@@ -71,8 +87,11 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
         data[i] = encoding[:, c]
         c += 1
 
+    # binarize target to 0 (missing) and 1 (non-missing)
     y = data[tuning_target].notnull().astype('int')
-    X = data
+
+    # drop target from observed data
+    X = data.drop(tuning_target, axis=1)
 
     if tuning_target in num_feat:
         num_feat = [i for i in num_feat if i != tuning_target]
@@ -80,52 +99,10 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
     cat_feat = X.drop(num_feat, axis=1).columns
 
     for c in cat_feat:
+        # missing values as new category in the categorical data
         X[c] = X[c].fillna(-1).astype('category', copy=False)
     for n in num_feat:
         X[n] = random_imputation(X[n].to_frame())
-
-    # scaling-encoding pipeline
-    numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
-    categorical_transformer = Pipeline(steps=[("encoder", TargetEncoder())])
-    preprocessor = ColumnTransformer(transformers=[("num", numeric_transformer, num_feat),
-                                                   ("cat", categorical_transformer, cat_feat)])
-
-    features_compl = X.columns
-
-    X_scaled = pd.DataFrame(preprocessor.fit_transform(X,y), columns=features_compl)
-
-    # remove multicollinearity
-    X_new, clusters = permutate_features(X_scaled, threshold)  # X_scaled
-    features = X_new.columns
-
-    return X_new, y, features, clusters
-
-def encode_scale_data(data, num_feat, tuning_target):
-
-    # encode objects in data
-    enc = OrdinalEncoder()
-    data_obj = data.select_dtypes(include=object)
-    enc.fit(data_obj)
-    encoding = enc.fit_transform(data[data_obj.columns])
-
-    c = 0
-
-    for i in data_obj.columns:
-        data[i] = encoding[:, c]
-        c += 1
-
-    # set target for scaling
-    y = data[tuning_target].notnull().astype('int')
-
-    # label missing values
-    X = data.fillna('missing')
-
-    cat_feat = X.drop(num_feat, axis=1).columns
-
-    # set categorical data to corresponding type
-    for c in cat_feat:
-        #X[c] = X[c].fillna(-1).astype('category', copy=False)  # missing values as new category in the categorical data
-        X[c] = X[c].astype('category', copy=False)
 
     # define scaling-encoding pipeline
     numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
@@ -133,21 +110,78 @@ def encode_scale_data(data, num_feat, tuning_target):
     preprocessor = ColumnTransformer(transformers=[("num", numeric_transformer, num_feat),
                                                    ("cat", categorical_transformer, cat_feat)])
 
-    # extract features
+    # extract feature names
     features_compl = X.columns
 
-    # perform scale-encode pipeline and put transformed data into df
-    X_scaled = pd.DataFrame(preprocessor.fit_transform(X, y), columns=features_compl)
+    # scale/encode the observed data
+    X_scaled = pd.DataFrame(preprocessor.fit_transform(X,y), columns=features_compl)
 
-    # impute missing values back into data
-    for f in features_compl:
-        # add missingness back into df
-        X_scaled.loc[X[f] == 'missing', f] = np.nan
+    # remove multicollinearity
+    X_new, clusters = permutate_features(X_scaled, threshold)
+    features = X_new.columns
 
-    return X_scaled
+    return X_new, y, features, clusters
+
+# def encode_scale_data(data, num_feat, tuning_target):
+#     """
+#             :param data:            a data frame with missing values
+#             :param num_feat:        a list of numeric features in the data
+#             :param tuning_target    the target feature
+#             :return:
+#     """
+#
+#     # encode objects in data
+#     enc = OrdinalEncoder()
+#     data_obj = data.select_dtypes(include=object)
+#     enc.fit(data_obj)
+#     encoding = enc.fit_transform(data[data_obj.columns])
+#
+#     c = 0
+#
+#     for i in data_obj.columns:
+#         data[i] = encoding[:, c]
+#         c += 1
+#
+#     # set target for scaling
+#     y = data[tuning_target].notnull().astype('int')
+#
+#     # label missing values
+#     X = data.fillna('missing')
+#
+#     cat_feat = X.drop(num_feat, axis=1).columns
+#
+#     # set categorical data to corresponding type
+#     for c in cat_feat:
+#         X[c] = X[c].astype('category', copy=False)
+#
+#     # define scaling-encoding pipeline
+#     numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
+#     categorical_transformer = Pipeline(steps=[("encoder", TargetEncoder())])
+#     preprocessor = ColumnTransformer(transformers=[("num", numeric_transformer, num_feat),
+#                                                    ("cat", categorical_transformer, cat_feat)])
+#
+#     # extract features
+#     features_compl = X.columns
+#
+#     # perform scale-encode pipeline and put transformed data into df
+#     X_scaled = pd.DataFrame(preprocessor.fit_transform(X, y), columns=features_compl)
+#
+#     # impute missing values back into data
+#     for f in features_compl:
+#         # add missingness back into df
+#         X_scaled.loc[X[f] == 'missing', f] = np.nan
+#
+#     return X_scaled
 
 def rosenbrock(vector, a=1, b=100):
-    """f(x, y) = (a-x)^2 + b(y-x^2)^2"""
+    """
+    :param vector:  a vector to calculate the rosenbrock function on
+    :param a:       variable in the function, default a=1
+    :param b:       variable in the function, default b=100
+    :return solution of the rosenbrock function for the given vector
+
+    f(x, y) = (a-x)^2 + b(y-x^2)^2
+    """
 
     vector = np.array(vector)
 
@@ -155,14 +189,35 @@ def rosenbrock(vector, a=1, b=100):
 
 
 def rastrigin(vector):
-    """                     n
+    """
+            :param vector:  a vector to calculate the rastrigin function on
+            :return solution of the rastrigin function for the given vector
+
             f(x) = 10*n + Sigma { x_i^2 - 10*cos(2*PI*x_i) }
-                           i=1
-                           with xi within [-5.12:5.12]
 
     """
 
     vector = np.array(vector)
 
     return 10 * vector.size + sum(vector * vector - 10 * np.cos(2 * np.pi * vector))
+
+
+def multi_csv_to_df(files, axis=0, index_col=None):
+    """
+            :param files:   list of csv file paths
+            :param axis:    on what axis to aggregate the files (rows (0) or columns (1))
+            :return:        a single data frame of the aggregated csv files
+    """
+
+    lst = []
+
+    # files to alphabetical order
+    files_sorted = sorted(files)
+
+    for filename in files_sorted:
+        df = pd.read_csv(filename, index_col=index_col, header=0)
+        lst.append(df)
+
+    df_results = pd.concat(lst, axis=axis, ignore_index=True)
+    return df_results
 

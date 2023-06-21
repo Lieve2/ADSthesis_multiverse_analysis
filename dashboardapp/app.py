@@ -309,8 +309,15 @@ Figures
 """
 
 def make_horbarplot(target, subset, sortby, title):
+    """
+            :param target:  name of target feature (str)
+            :param subset:  either 'all' (str) or 'subset' (str)
+            :param sortby:  name of model class to sort by (str)
+            :param title:   title of plot (str)
+            :return:        interactive horizontal bar plot with feature importances
+    """
 
-# filter data based on interaction input
+    # filter data based on interaction input
     if (subset == 'subset' and target != 'average'):
         data_RF = df_imp_RF.loc[:, ['Feature',target]]
         data_RF = data_RF.dropna()
@@ -326,7 +333,7 @@ def make_horbarplot(target, subset, sortby, title):
         data_MLP = df_imp_c_MLP
         height = 6000
 
-# sort data based on interaction input
+    # sort data based on interaction input
     if sortby == 'Random Forest':
         data_RF = data_RF.sort_values(target)
         sorting = data_RF['Feature']
@@ -341,10 +348,10 @@ def make_horbarplot(target, subset, sortby, title):
         specs=[[{}]]
     )
 
-# adjust layout to place x-axis labels on top and bottom
+    # adjust layout to place x-axis labels on top and bottom
     fig.update_layout(xaxis2={'anchor':'y', 'overlaying':'x', 'side':'top'})
 
-# make horizontal bar plots
+    # make horizontal bar plots
     fig.add_trace(
             go.Bar(
                 x=data_RF[target],
@@ -378,7 +385,7 @@ def make_horbarplot(target, subset, sortby, title):
         )
     )
 
-# make ghost plot for x-axis adjustment (i.e. ticks & labels on top and bottom)
+    # make ghost plot for x-axis adjustment (i.e. ticks & labels on top and bottom)
     fig.add_trace(
         go.Bar(
         x=None,
@@ -388,7 +395,7 @@ def make_horbarplot(target, subset, sortby, title):
         )
     )
 
-# update x-axis again for x-axis adjustment (i.e. ticks & labels on top and bottom)
+    # update x-axis again for x-axis adjustment (i.e. ticks & labels on top and bottom)
     fig.data[3].update(xaxis='x2')
 
     fig.update_xaxes(range=[0, 0.9],
@@ -397,7 +404,7 @@ def make_horbarplot(target, subset, sortby, title):
                      ticktext=[0, '', 0.1, '', 0.2, 0.3, 0.5, 0.85],
                      )
 
-# adjust layout
+    # adjust layout
     fig.update_layout(
         title_text=title,
         # template="none",
@@ -421,10 +428,16 @@ def make_horbarplot(target, subset, sortby, title):
     return fig
 
 def make_vertbarplot(target, metrics, title):
+    """
+            :param target:      name of target feature (str)
+            :param metrics:     list of metrics to show (list(str))
+            :param title:       title of plot (str)
+            :return:            standard interactive bar plot with model performances
+    """
 
     fig = go.Figure()
 
-# make bar plots
+    # make bar plots
     fig.add_trace(
             go.Bar(
                 y= df_perf_RF[target],
@@ -455,7 +468,7 @@ def make_vertbarplot(target, metrics, title):
         )
     )
 
-# add 0.7 threshold line
+    # add 0.7 threshold line
     fig.add_hline(y=0.70, line_width=2.5, line_dash=None, row='all', col='all',
                   annotation_text='Decent performance threshold (0.70)',
                   annotation=dict(font_size=11, bgcolor='white', opacity=0.7),
@@ -463,7 +476,7 @@ def make_vertbarplot(target, metrics, title):
                   annotation_position='bottom right')
 
 
-# adjust layout
+    # adjust layout
     fig.update_layout(
         title_text=title,
         template="none",
@@ -481,8 +494,13 @@ def make_vertbarplot(target, metrics, title):
     return fig
 
 def make_heatmap(target, title):
+    """
+            :param target:  name of target feature (str)
+            :param title:   title of plot (str)
+            :return:        heat map with feature (Spearman) correlations
+    """
 
-# determine data based on interaction input
+    # determine data based on interaction input
     if target=='average':
         data = df_original
         features = df_original.columns
@@ -491,18 +509,19 @@ def make_heatmap(target, title):
         features = df_imp_RF.loc[:, ['Feature',target]].dropna()['Feature']
         data = df_original[df_original.columns.intersection(features)]
 
-# calculate correlation
+    # calculate correlation
     corr = data.corr()
 
     fig = go.Figure()
 
-# make heat map
+    # make heat map
     fig.add_trace(
         go.Heatmap(
             z = corr,
             x=features,
             y=features,
-            colorscale=[[0, COLORS['model2']], # manual color scale to highlight high correlation values
+            # manual color scale to highlight high correlation values
+            colorscale=[[0, COLORS['model2']],
                         [0.3, COLORS['background']],
                         [0.7, COLORS['background']],
                         [1, COLORS['model1']]],
@@ -513,7 +532,7 @@ def make_heatmap(target, title):
         )
     )
 
-# adjust layout
+    # adjust layout
     fig.update_layout(
         title_text=title,
         template="none",
@@ -532,6 +551,11 @@ def make_heatmap(target, title):
     return fig
 
 def make_classmaps(target, title):
+    """
+            :param target:  name of target feature (str)
+            :param title:   title of plot (str)
+            :return:        class maps (collection of scatter plots)
+    """
 
 # make subplots space
     fig = make_subplots(rows=3, cols=2,
@@ -545,7 +569,7 @@ def make_classmaps(target, title):
 
     fig.update_annotations(font_size=14)
 
-# define data based on interaction input
+    # define data based on interaction input
     if target != 'average':
         classmap_data_RF = pd.read_csv(
             '~/PycharmProjects/ADSthesis/classmaps/RF/cm_RF_{}.csv'.format(target))
@@ -667,7 +691,7 @@ def make_classmaps(target, title):
             ),
             row=1, col=1)
 
-# adjust layout and add helper lines
+        # adjust layout and add helper lines
         fig.update_xaxes(range=[-0.05, qfunc(1)+0.01],
                          tickmode='array',
                          tickvals=qfunc(np.array([0, 0.5, 0.75, 0.9, 0.99, 0.999, 1])),
@@ -699,7 +723,7 @@ def make_classmaps(target, title):
             legend=dict(y=0.97),
         )
 
-# show empty square with take-action clause when 'average' is selected
+    # show empty square with take-action clause when 'average' is selected
     else:
         fig = go.Figure()
         fig.update_layout(
@@ -972,6 +996,11 @@ Callbacks
 )
 
 def update_clusterinfotext(target, datadescript):
+    """
+            :param target:          name of target feature (str)
+            :param datadescript:    either 'show cluster info' (str) or 'show feature info' (str)
+            :return:                updated text
+    """
 
     text = clusterinfotext(target, datadescript)
     return text
@@ -985,8 +1014,14 @@ def update_clusterinfotext(target, datadescript):
 )
 
 def update_horbarplot(target, subset, sortby):
+    """
+            :param target:  name of target feature (str)
+            :param subset:  either 'subset' (str) or 'all' (str)
+            :param sortby:  name of model class by which to sort the plot (str)
+            :return:        updated horizontal bar plot
+    """
 
-    figure = make_horbarplot(target, subset, sortby, " Feature Importance '{}'".format(target))
+    figure = make_horbarplot(target, subset, sortby, " Feature importance '{}'".format(target))
     return figure
 
 # vert bar plot callback
@@ -997,8 +1032,13 @@ def update_horbarplot(target, subset, sortby):
 )
 
 def update_vertbarplot(target, metrics):
+    """
+            :param target:  name of target feature (str)
+            :param metrics: list of metrics to show (list(str))
+            :return:        updated standard bar plot
+    """
 
-    figure = make_vertbarplot(target, metrics," Performance of '{}'".format(target)) #input, title
+    figure = make_vertbarplot(target, metrics," Performance of '{}'".format(target))
     return figure
 
 # class maps callback
@@ -1008,6 +1048,10 @@ def update_vertbarplot(target, metrics):
 )
 
 def update_classmaps(target):
+    """
+            :param target:  name of target feature (str)
+            :return:        updated class maps
+    """
 
     figure = make_classmaps(target," Performance of '{}'".format(target))
     return figure
@@ -1019,6 +1063,10 @@ def update_classmaps(target):
 )
 
 def update_heatmap(target):
+    """
+            :param target:  name of target feature (str)
+            :return:        updated heat map
+    """
 
     if target=='average':
         title = 'Original Data'

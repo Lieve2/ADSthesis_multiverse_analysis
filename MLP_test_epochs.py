@@ -7,7 +7,15 @@ from utility_functions import encode_scale_data_perm
 
 
 def epoch_test(data, targets, threshold, num_feat, classifier):
+    """
+            :param data:        cleaned data set with missing values
+            :param targets:     list of targets (list(str))
+            :param threshold:   the (cut) level for clustering
+            :param num_feat:    list of numerical features in the data (list(str))
+            :param classifier:  classification model for which to test the epochs-performance distribution
+    """
 
+    # clean the data and split into train, validation and test sets
     for target in targets:
 
         X, y, features, clusters = encode_scale_data_perm(data, target, threshold, num_feat)
@@ -25,6 +33,7 @@ def epoch_test(data, targets, threshold, num_feat, classifier):
                 train_loss_.append(classifier.loss_)
                 valid_loss_.append(log_loss(y_valid, classifier.predict_proba(X_valid)))
 
+        # plot the results
         plt.plot(range(len(train_loss_)), train_loss_, label="train loss")
         plt.plot(range(len(valid_loss_)), valid_loss_, label="validation loss")
         plt.title('model loss')
@@ -33,6 +42,8 @@ def epoch_test(data, targets, threshold, num_feat, classifier):
         plt.legend()
         plt.savefig('figures/justification_epochs_{}.png'.format(target), dpi=300, bbox_inches='tight')
         plt.show()
+
+### ----- define the input variables and run the test ----- ###
 
 data3 = pd.read_csv('ESS8 data/ESS8_subset_cleaned_timeadj_wmissingvals.csv', low_memory=False)
 

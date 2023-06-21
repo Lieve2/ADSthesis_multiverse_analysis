@@ -4,17 +4,24 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from scipy.stats import norm
 
+### ----- helper function ----- ###
+
 qfunc = lambda x : abs(norm.ppf(x*(norm.pdf(4) - 0.5) + 0.5))
 
+### ----- begin class maps test ###
+
+# load data
 classmap_target0 = pd.read_csv('classmaps/MLP/cm_MLP_netustm.csv')
 classmap_target0.rename(columns={'Unnamed: 0':'observation'}, inplace=True)
-print(classmap_target0['colors'])
 
+# separate classes
 classmap_target0_c0 = classmap_target0[classmap_target0['class'] == 0]
 classmap_target0_c1 = classmap_target0[classmap_target0['class'] == 1]
 
+# make scatter plot
 plt.scatter(y=classmap_target0_c0['prob alternative'], x=classmap_target0_c0['farness'], c=classmap_target0_c0['colors'])
 
+# add titles to plot
 plt.suptitle("Localized class map, class 0") # change for class 1
 plt.title('Model Matthews coefficient: ' + str(classmap_target0_c0['model perf'][0]) + '\n'+
           'Class Matthews coefficient: ' + str(classmap_target0_c0['class perf'][0]),
@@ -47,4 +54,5 @@ plt.legend(handles=ptchs,
             title='Predicted Class')
 plt.rcParams["legend.fontsize"] = 6
 
+# show plot
 plt.show()

@@ -1,4 +1,3 @@
-import math
 import pandas as pd
 from ABC_algorithm_RF import ArtificialBeeColony
 from localized_classmap import plotExplanations
@@ -14,8 +13,13 @@ import joblib
 import shap
 shap.initjs()
 
-
 def Trainer(X_train, y_train, pars):
+    """
+            :param X_train:     observed training data (df)
+            :param y_train:     target training data (array)
+            :param pars:        hyperparameter values (list)
+            :return:            fitted classification model
+    """
 
     pars = (np.array(pars) * scaling_factor)
 
@@ -39,7 +43,14 @@ def Trainer(X_train, y_train, pars):
 
     return clf
 
+
 def Tester(clf, X_test, y_test):
+    """
+            :param clf:     fitted classification model
+            :param X_test:  observed test data (df)
+            :param y_test:  target test data (array)
+            :return:        the miscalculation value, true classifications, and predicted classifications
+    """
 
     y_test = np.array(y_test)
     true = y_test
@@ -59,6 +70,15 @@ def Tester(clf, X_test, y_test):
     return miscalc, true, predicted
 
 def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False):
+    """
+            :param X_train:         observed training data (df)
+            :param y_train:         target training data (array)
+            :param X_test:          observed test data (df)
+            :param y_test:          target test data (array)
+            :param pars:            hyperparameter values (list)
+            :param feat_importance: whether or not to calculate feature importance and class maps (binary)
+            :return:                test results, feature importance, fitted model, and class map data
+    """
 
     classification = Trainer(X_train, y_train, pars)
 
@@ -77,6 +97,12 @@ def SearchingPars(X_train, y_train, X_test, y_test, pars, feat_importance=False)
     return Tester(classification, X_test, y_test), importances, classification, classmap
 
 def BestParMeasures(true, predicted):
+    """
+            :param true:        true classifications
+            :param predicted:   predicted classifications
+            :return:            performance metrics: accuracy, balanced accuracy, ROC score, F1 score,
+                                confusion matrix, and matthews correlation coefficient
+    """
 
     true = np.array(true)
     predicted = np.array(predicted)
@@ -109,13 +135,24 @@ class OptRFParameters(AbstractWrapper):
 
 
     def objective_function_value(self, decision_variable_values):
+        """
+                :param decision_variable_values:     hyperparameter values (list)
+                :return:                             test results, feature importance, fitted model, and class map data
+        """
+
         return SearchingPars(self.sub_X_train, self.sub_y_train,
                              self.sub_X_test, self.sub_y_test,
                              decision_variable_values)
 
 
-def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test): #measures
-    """Find..."""
+def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test):
+    """
+            :param sub_X_train:     subset of observed training data
+            :param sub_y_train:     subset of target training data
+            :param sub_X_test:      subset of observed test data
+            :param sub_y_test:      subset of target test data
+            :return:                optimal parameters and corresponding matthews coefficient
+    """
 
 
     # adjust objective function
@@ -154,14 +191,15 @@ def Search(sub_X_train, sub_y_train, sub_X_test, sub_y_test): #measures
     return pars, fitness
 
 def KfoldCV(k, X, y, filename, features):
-    """Perform k-fold cross-validation on the parameter searching/optimization process.
-    Takes the following parameters as input:
+    """
+            Perform k-fold cross-validation on the parameter searching/optimization process.
 
-    k: the number of folds
-    X: the complete data set
-    y: the target set """
-
-    ## define folds using stratified k-fold
+            :param k:           the number of folds (int)
+            :param X:           the complete (subset of) observed data set (df)
+            :param y:           the target set (array)
+            :param filename:    the name of the file (str)
+            :param features:    the list of features present in the observed data
+    """
 
     # train-test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=144)
