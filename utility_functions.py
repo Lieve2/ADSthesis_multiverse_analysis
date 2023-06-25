@@ -4,6 +4,7 @@ from random import random
 import numpy as np
 import pandas as pd
 from category_encoders import OrdinalEncoder, TargetEncoder
+from joblib import parallel_backend
 from matplotlib import pyplot as plt
 from matplotlib.font_manager import FontProperties
 from scipy.cluster import hierarchy
@@ -11,7 +12,13 @@ from scipy.cluster._optimal_leaf_ordering import squareform
 from scipy.stats import spearmanr
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -50,7 +57,7 @@ def permutate_features(X, threshold):
 
     # distance matrix and linkage with Ward's
     dist_matrix = 1 - np.abs(corr)
-    dist_link = hierarchy.ward(squareform(dist_matrix))
+    dist_link = hierarchy.ward(squareform(dist_matrix)) #checks=False
 
     # group features in clusters and keep one feature per cluster
     cluster_ids = hierarchy.fcluster(dist_link, threshold, criterion='distance')
@@ -86,7 +93,7 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
     c = 0
 
     for i in data_obj.columns:
-        data[i] = encoding[:, c]
+        data[i] = encoding.iloc[:, c]
         c += 1
 
     # binarize target to 0 (missing) and 1 (non-missing)
@@ -117,6 +124,93 @@ def encode_scale_data_perm(data, tuning_target, threshold, num_feat):
 
     # scale/encode the observed data
     X_scaled = pd.DataFrame(preprocessor.fit_transform(X, y), columns=features_compl)
+
+    # remove multicollinearity
+    X_new, clusters = permutate_features(X_scaled, threshold)
+    features = X_new.columns
+
+    return X_new, y, features, clusters
+
+def encode_scale_data_perm_mi(data, tuning_target, threshold, num_feat):
+    """
+            :param data:            the complete data set
+            :param tuning_target:   the target feature
+            :param threshold:       the (cut) level for clustering
+            :param num_feat:        a list with numeric features
+            :return:                X_new (the complete and scaled/encoded subset of observed data)
+                                    y (the binarized target feature),
+                                    features (list with features present in X_new),
+                                    clusters (list with cluster information)
+    """
+
+    # encode objects in data
+    enc = OrdinalEncoder()
+    data_obj = data[data.columns.intersection(num_feat)]
+    enc.fit(data_obj)
+    encoding = enc.fit_transform(data[data_obj.columns])
+
+    c = 0
+
+    for i in data_obj.columns:
+        data[i] = encoding.iloc[:, c]
+        c += 1
+
+    # binarize target to 0 (missing) and 1 (non-missing)
+    y = data[tuning_target].notnull().astype('int')
+
+    # drop target from observed data
+    X = data.drop(tuning_target, axis=1)
+
+    # make copy of observed variables set
+    X_copy = X.copy()
+
+    # make mask of missing values
+    missing_mask = X_copy.isna()
+
+    # initialize MICE imputer
+    # with parallel_backend('threading', n_jobs=-1):
+    imputer = IterativeImputer(max_iter=3,
+                                random_state=144,
+                                verbose=2,
+                                initial_strategy='most_frequent',
+                                add_indicator=False,
+                                imputation_order='random')
+
+    # calculate values to impute and impute them into the data
+    X_imp = imputer.fit_transform(X_copy)
+    X_imputed = pd.DataFrame(X_imp, columns=X_copy.columns)
+    # X_imputed = X_copy.where(missing_mask, X_imp)
+    # X_copy[missing_mask] = X_imp[missing_mask]
+    # print(X_imp.shape())
+
+
+    if tuning_target in num_feat:
+        num_feat = [i for i in num_feat if i != tuning_target]
+
+    cat_feat = X.drop(num_feat, axis=1).columns
+    X_imputed[cat_feat] = X_imputed[cat_feat].astype('category')
+    # print(X_imputed.isnull().any())
+
+    # for c in cat_feat:
+    #     # missing values as new category in the categorical data
+    #     X[c] = X[c].fillna(-1).astype('category', copy=False)
+    # for n in num_feat:
+    #     X[n] = random_imputation(X[n].to_frame())
+
+    # define scaling-encoding pipeline
+    numeric_transformer = Pipeline(steps=[("scaler", StandardScaler())])
+    categorical_transformer = Pipeline(steps=[("encoder", TargetEncoder(handle_missing='error', handle_unknown='error'))])
+    preprocessor = ColumnTransformer(transformers=[("num", numeric_transformer, num_feat),
+                                                   ("cat", categorical_transformer, cat_feat)])
+
+    # extract feature names
+    features_compl = X_imputed.columns
+
+    # scale/encode the observed data
+    X_scaled = pd.DataFrame(preprocessor.fit_transform(X_imputed, y), columns=features_compl)
+
+    # print(y[y==0])
+    # print(X_scaled.nunique()) #.nunique()
 
     # remove multicollinearity
     X_new, clusters = permutate_features(X_scaled, threshold)
