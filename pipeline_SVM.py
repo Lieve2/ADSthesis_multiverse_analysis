@@ -1,7 +1,7 @@
 import joblib
 import warnings
 from sklearn.ensemble import BaggingClassifier
-from ABC_algorithm_SVM import ArtificialBeeColony
+from ABC_algorithms.ABC_algorithm_SVM import ArtificialBeeColony
 from localized_classmap import plotExplanations
 from wrapper import AbstractWrapper
 from sklearn.svm import SVC

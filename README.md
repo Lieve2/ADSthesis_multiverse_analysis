@@ -27,11 +27,45 @@ Moreover, the adapted version of the Artificial Bee Colony algorithm, inspired b
 for each of the model classes can be found here: `ABC_algorithm_RF.py`, `ABC_algorithm_SVM.py`, `ABC_algorithm_MLP.py`.
 
 ### Results
-add something here
+With an average Matthews correlation coefficient of 0.71, 
+the Random Forest class performs best, but all three classes 
+provide approximately similar results with respect to the 
+feature importance. Even though these classification models 
+do not always perform well, a consensus on the types
+of variables that are informative for a set of targets regarding 
+the topics of politics and trust, attitudes toward sexual and
+ethnic minorities, social behavior, religion, background, 
+energy supplies and climate (change), social benefits (e.g. 
+pension or child care) and employment, attitudes toward the 
+European Union, and education can be distinguished from the 
+results. More specifically, the results suggest the importance
+of including variables employment, education level, domicile, 
+and household and partner information, especially when dealing
+with more fact-related variables. 
+
+Though limitations remain in accounting for the 
+researcher degrees of freedom and the missing data 
+in the observed variables, this study shows that multiverse
+analysis can adequately direct the process of identifying
+predictors of non-response by constructing a set of models,
+that classify item non-response in a set of targets, in a 
+relatively flexible way due to the possibility of using
+different types of models. This can benefit the successful
+construction of an archive of informative predictors, due
+to multiverse pipelines, like the one proposed in this study,
+being easily adaptable to different contexts and purposes,
+allowing researchers from different fields to contribute to
+the construction of this archive.
 
 ### Dashboard
-add something here
+In the final dashboard effort is put into 
+providing essential information in an exhaustive 
+and transparent way, without compromising clarity, 
+for a wide audience, ranging from beginning data science 
+students to established researchers.
 
+The code to build the dashboard can be found in the `dashboardapp` folder.
+The dashboard itself can be accessed here: http://multiverseanalysisvisualizer.pythonanywhere.com/.
 
 ## General setup:
 

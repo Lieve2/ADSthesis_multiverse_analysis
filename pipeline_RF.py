@@ -1,5 +1,5 @@
 import pandas as pd
-from ABC_algorithm_RF import ArtificialBeeColony
+from ABC_algorithms.ABC_algorithm_RF import ArtificialBeeColony
 from localized_classmap import plotExplanations
 from wrapper import AbstractWrapper
 from sklearn.ensemble import RandomForestClassifier

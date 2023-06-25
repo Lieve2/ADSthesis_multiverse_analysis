@@ -1,5 +1,5 @@
 import utility_functions
-from ABC_algorithm_SVM import ArtificialBeeColony
+from ABC_algorithms.ABC_algorithm_SVM import ArtificialBeeColony
 from utility_functions import rosenbrock, rastrigin
 
 

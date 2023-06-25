@@ -2,7 +2,7 @@ import warnings
 import joblib
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
-from ABC_algorithm_MLP import ArtificialBeeColony
+from ABC_algorithms.ABC_algorithm_MLP import ArtificialBeeColony
 from localized_classmap import plotExplanations
 from wrapper import AbstractWrapper
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, roc_auc_score, \
