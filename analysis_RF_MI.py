@@ -5,6 +5,12 @@ import pandas
 import pandas as pd
 from utility_functions import multi_csv_to_df
 
+from matplotlib import pyplot as plt
+import seaborn as sns
+sns.set()
+
+plt.style.use('bmh')
+
 pandas.set_option('display.max_rows', 188)
 
 # load data
@@ -61,6 +67,28 @@ df_perf_RFMI.insert(loc=0, column='Metric', value=df_perf_RFMI.index)
 df_perf_RFMI.reset_index(drop=True, inplace=True)
 
 print(df_perf_RFMI)
+print(min(df_perf_RFMI.iloc[4, 1:]))
+print(df_perf_RFMI.columns[df_perf_RFMI.isin([min(df_perf_RFMI.iloc[4, 1:])]).any()])
+
+# performance plot, similar to other plots in the main analysis
+df_perf_RFMI_plt = df_perf_RFMI.drop('average', axis=1).T
+df_perf_RFMI_plt.columns = df_perf_RFMI_plt.iloc[0]
+df_perf_RFMI_plt = df_perf_RFMI_plt.drop(df_perf_RFMI_plt.index[0])
+
+fig, ax = plt.subplots(figsize=(30, 10))
+fig.subplots_adjust(top=0.95)
+sns.set_color_codes("pastel")
+sns.lineplot(df_perf_RFMI_plt.loc[:, ['Matthews', 'F1']], markers=False, dashes=True)
+#fig.suptitle("Performance of best Random Forest model for each of 74 targets", fontsize=18)
+ax.set_xlabel("Target", size=25)
+ax.set_ylabel("Performance", size=25)
+ax.set_xticklabels(df_perf_RFMI_plt.index)
+plt.xticks(np.arange(0, 65, 1), rotation=90, size=20)
+plt.yticks(np.arange(0, 1.01, 0.1), size=20)
+plt.setp(ax.get_legend().get_texts(), fontsize='20') # for legend text
+plt.setp(ax.get_legend().get_title(), fontsize='22') # for legend title
+plt.savefig('figures/lineplot_performance_best_RFMI.png', bbox_inches='tight', dpi=300);
+
 
 # store data as csv
 df_perf_RFMI.to_csv("dashboardapp/finaldata/performance_RFMI.csv", index=False)
